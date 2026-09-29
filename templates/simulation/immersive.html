@@ -20,9 +20,13 @@
     <!-- MAIN IMMERSIVE CONTAINER (Dimensions locked via inline styles to prevent collapse) -->
     <div id="stimulus-container" style="width: 95vw; height: 85vh;" class="relative bg-[#050505] rounded-3xl overflow-hidden border-2 border-cyan-500 shadow-[0_0_30px_rgba(0,198,255,0.2)] transition-all duration-500">
         
-        <!-- THE BACKGROUND STIMULUS VIDEO -->
-        <video id="stimulus-video" src="{{ scenario_media }}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity duration-1000"></video>
-        
+        <!-- THE BACKGROUND STIMULUS (Smart Media Handler) -->
+        {% if ".mp4" in scenario_media or ".webm" in scenario_media %}
+            <video id="stimulus-video" src="{{ scenario_media }}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity duration-1000"></video>
+        {% else %}
+            <img id="stimulus-video" src="{{ scenario_media }}" class="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity duration-1000">
+        {% endif %}
+
         <!-- TEXT OVERLAY (Centered) -->
         <div class="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 bg-black/40 pointer-events-none">
             <h2 id="protocol-title" class="text-cyan-500 text-5xl md:text-6xl font-black tracking-[0.2em] mb-8 drop-shadow-[0_0_15px_rgba(0,255,255,0.8)] transition-all">
@@ -191,7 +195,7 @@
             body: JSON.stringify({
                 peak_hr: peakHr,
                 end_hr: endHr,
-                scenario: "{{ scenario_name }}",
+                scenario_id: "{{ scenario_id }}",
                 target_level: "{{ target_level_name }}"
             })
         });

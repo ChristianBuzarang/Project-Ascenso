@@ -32,8 +32,8 @@
                     <label class="block text-cyan-400 mb-3 text-lg font-bold">> TARGET_SCENARIO</label>
                     <!-- Increased text size to text-lg and padding to p-4 -->
                     <select name="scenario" class="w-full bg-slate-900/80 border border-cyan-500/50 text-white text-lg p-4 outline-none focus:border-cyan-400 hover:bg-slate-800 transition-colors cursor-pointer appearance-none">
-                        {% for key, data in scenarios.items %}
-                            <option value="{{ key }}">{{ data.name }}</option>
+                        {% for scenario in scenarios %}
+                            <option value="{{ scenario.id }}">{{ scenario.name }}</option>
                         {% endfor %}
                     </select>
                 </div>

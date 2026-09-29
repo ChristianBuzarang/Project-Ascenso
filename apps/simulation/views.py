@@ -2,61 +2,58 @@ import json
 import base64
 import numpy as np
 import cv2
+
 from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
 from .ai_agent import AscendAgent
-from .models import AscensionRecord
+from .models import AscensionRecord, FearScenario
 
 # Initialize our agent globally
 agent = AscendAgent()
 
-FEAR_SCENARIOS = {
-    "darkness": {
-        "name": "[Primal] Fear of Darkness",
-        "gif": "https://media1.tenor.com/m/7aX9v2wQx8IAAAAd/creepy-dark.gif",
-    },
-    "spiders": {
-        "name": "[Primal] Fear of Spiders",
-        "gif": "https://media1.tenor.com/m/BvP_1O83Ew8AAAAd/spider-jump.gif",
-    },
-    "public_speaking": {
-        "name": "[Social] Public Speaking",
-        "gif": "https://media1.tenor.com/m/9e9W2n4XNjgAAAAd/crowd-staring.gif",
-    },
-    "unknown": {
-        "name": "[Existential] The Unknown",
-        "gif": "https://media1.tenor.com/m/0o_8z2l4L70AAAAd/trippy-abstract.gif",
-    },
-}
-
+# We keep Levels hardcoded since they belong to the Michael's Consortium framework
 FEAR_LEVELS = {
     "1": "Level 1: Apprehension",
+    "2": "Level 2: Denial",
     "3": "Level 3: Fright",
-    "5": "Level 5: Panic",
-    "7": "Level 7: Collapse",
+    "4": "Level 4: Retreat",
+    "5": "Level 5: Terror",
+    "6": "Level 6: Numbness",
+    "7": "Level 7: Apathy",
 }
-FEAR_THRESHOLDS = {"1": 95, "3": 120, "5": 150, "7": 180}
+
+FEAR_THRESHOLDS = {"1": 95, "2": 110, "3": 120, "4": 135, "5": 150, "6": 165, "7": 180}
 
 
 @login_required(login_url="login:login")
 def immersive_room_view(request):
-    scenario_key = request.GET.get("scenario", "unknown")
+    # Get the Database ID from the URL (e.g., ?scenario=1)
+    scenario_id = request.GET.get("scenario")
     level_key = request.GET.get("level", "5")
 
+    try:
+        # Fetch the exact video and name from your Database!
+        scenario_obj = FearScenario.objects.get(id=scenario_id)
+        scenario_name = scenario_obj.name
+        scenario_media = scenario_obj.media_file
+    except (FearScenario.DoesNotExist, ValueError):
+        scenario_name = "[System Error] Unknown Protocol"
+        scenario_media = ""
+
     context = {
-        "scenario_name": FEAR_SCENARIOS[scenario_key]["name"],
-        "scenario_gif": FEAR_SCENARIOS[scenario_key]["gif"],
-        "target_level_name": FEAR_LEVELS[level_key],
-        "target_hr": FEAR_THRESHOLDS[level_key],
+        "scenario_id": scenario_id,  # Pass ID to HTML so it can save it later
+        "scenario_name": scenario_name,
+        "scenario_media": scenario_media,
+        "target_level_name": FEAR_LEVELS.get(level_key, "Level 5: Panic"),
+        "target_hr": FEAR_THRESHOLDS.get(level_key, 150),
     }
     return render(request, "simulation/immersive.html", context)
 
 
 @csrf_exempt
 def process_frame_api(request):
-    """The browser sends webcam snapshots here every 1 second (Now perfectly thread-safe)"""
     if request.method == "POST":
         data = json.loads(request.body)
 
@@ -92,15 +89,24 @@ def process_frame_api(request):
 
 @csrf_exempt
 def end_session_api(request):
+    """Saves the final session data to the Supabase Database when the user exits"""
     if request.method == "POST":
         data = json.loads(request.body)
+
         if request.user.is_authenticated:
+            try:
+                # Find the scenario object so we can link it as a Foreign Key
+                scenario_obj = FearScenario.objects.get(id=data.get("scenario_id"))
+            except FearScenario.DoesNotExist:
+                scenario_obj = None
+
             AscensionRecord.objects.create(
                 user=request.user,
-                scenario=data.get("scenario", "Unknown"),
+                scenario=scenario_obj,  # Saves the exact scenario from the DB!
                 target_level=data.get("target_level", "Unknown"),
                 peak_hr=data.get("peak_hr", 70.0),
                 end_hr=data.get("end_hr", 70.0),
             )
+
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "failed"}, status=400)
