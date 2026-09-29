@@ -1,0 +1,202 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    /* Absolute blackout for maximum immersion */
+    nav { display: none !important; }
+    body { background-color: #020202 !important; overflow: hidden; }
+    
+    .panic-border { animation: panicPulse 0.5s infinite; }
+    @keyframes panicPulse { 
+        0% { box-shadow: 0 0 10px #ff4b2b inset, 0 0 10px #ff4b2b; } 
+        50% { box-shadow: 0 0 50px #ff4b2b inset, 0 0 40px #ff4b2b; } 
+        100% { box-shadow: 0 0 10px #ff4b2b inset, 0 0 10px #ff4b2b; } 
+    }
+</style>
+
+<!-- Pinned firmly to the absolute screen dimensions -->
+<div class="fixed inset-0 w-full h-screen bg-black flex items-center justify-center animate-fade-in z-0">
+    
+    <!-- MAIN IMMERSIVE CONTAINER (Dimensions locked via inline styles to prevent collapse) -->
+    <div id="stimulus-container" style="width: 95vw; height: 85vh;" class="relative bg-[#050505] rounded-3xl overflow-hidden border-2 border-cyan-500 shadow-[0_0_30px_rgba(0,198,255,0.2)] transition-all duration-500">
+        
+        <!-- THE BACKGROUND STIMULUS VIDEO -->
+        <video id="stimulus-video" src="{{ scenario_media }}" autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover opacity-50 transition-opacity duration-1000"></video>
+        
+        <!-- TEXT OVERLAY (Centered) -->
+        <div class="relative z-10 flex flex-col items-center justify-center w-full h-full p-10 bg-black/40 pointer-events-none">
+            <h2 id="protocol-title" class="text-cyan-500 text-5xl md:text-6xl font-black tracking-[0.2em] mb-8 drop-shadow-[0_0_15px_rgba(0,255,255,0.8)] transition-all">
+                ACTIVE PROTOCOL
+            </h2>
+            <p id="stimulus-text" class="text-white text-2xl md:text-3xl text-center italic leading-relaxed max-w-4xl drop-shadow-lg transition-all">
+                {{ scenario_name }}
+            </p>
+        </div>
+
+        <!-- PICTURE-IN-PICTURE WEBCAM (Top Left) -->
+        <div class="absolute top-6 left-6 w-48 md:w-64 aspect-video bg-slate-900 rounded-2xl overflow-hidden border-2 border-slate-500 shadow-2xl z-50">
+            <video id="webcam" autoplay muted playsinline class="w-full h-full object-cover transform scale-x-[-1]"></video>
+            <div class="absolute bottom-2 left-2 bg-black/70 px-2 py-1 rounded text-cyan-400 text-[10px] font-mono border border-cyan-500/30">
+                ● CV_FEED_ACTIVE
+            </div>
+        </div>
+
+        <!-- HUD: STATUS & HEART RATE (Top Right) -->
+        <div class="absolute top-6 right-6 flex flex-col items-end gap-3 z-50 pointer-events-none">
+            <div id="status-bar" class="glass-panel px-5 py-2 rounded-xl text-cyan-400 text-xs md:text-sm font-bold border border-cyan-400/30 shadow-[0_0_15px_rgba(0,255,255,0.2)] transition-all">
+                🟢 AGENT STATUS: SCANNING
+            </div>
+            <div class="glass-panel px-5 py-2 rounded-xl text-white text-lg md:text-xl font-mono border border-slate-700 shadow-[0_0_15px_rgba(255,255,255,0.1)] flex items-center gap-2">
+                <svg class="w-6 h-6 text-red-500 animate-pulse" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                <span id="hr-display" class="text-cyan-400 font-bold text-2xl md:text-3xl">70.0</span> BPM
+            </div>
+        </div>
+
+    </div>
+
+    <!-- EMERGENCY ABORT BUTTON (Z-index locked to 9999 to guarantee clickability) -->
+    <div class="fixed bottom-6 left-1/2 -translate-x-1/2" style="z-index: 9999;">
+        <button id="abort-btn" class="px-8 py-3 bg-[#0a0a0a] text-red-500 border-2 border-red-500/50 rounded-xl font-mono text-lg md:text-xl font-bold tracking-widest hover:bg-red-600 hover:text-white hover:border-red-400 transition-all duration-300 cursor-pointer" style="box-shadow: 0 0 20px rgba(255,0,0,0.4);">
+            [ ABORT / END PROTOCOL ]
+        </button>
+    </div>
+
+</div>
+
+<!-- Audio Player for AI TTS -->
+<audio id="ai-audio" class="hidden"></audio>
+
+<script>
+    const video = document.getElementById('webcam');
+    const canvas = document.createElement('canvas'); 
+    const ctx = canvas.getContext('2d');
+    const hrDisplay = document.getElementById('hr-display');
+    const stimulusContainer = document.getElementById('stimulus-container');
+    const stimulusVideo = document.getElementById('stimulus-video');
+    const protocolTitle = document.getElementById('protocol-title');
+    const stimulusText = document.getElementById('stimulus-text');
+    const statusBar = document.getElementById('status-bar');
+    const audioPlayer = document.getElementById('ai-audio');
+    const abortBtn = document.getElementById('abort-btn');
+
+    let currentFear = 10.0;
+    let lastCenter = null;
+    let isIntervening = false;
+    let isEnding = false;
+    
+    let peakHr = 70.0;
+    let endHr = 70.0;
+    let simulationInterval;
+
+    navigator.mediaDevices.getUserMedia({ video: true }).then(stream => {
+        video.srcObject = stream;
+        video.onloadedmetadata = () => {
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+        };
+    }).catch(err => alert("Camera access required for simulation."));
+
+    simulationInterval = setInterval(async () => {
+        if (isIntervening || isEnding || !video.videoWidth) return;
+
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        const base64Image = canvas.toDataURL('image/jpeg', 0.5);
+
+        try {
+            const response = await fetch('{% url "simulation:process_frame" %}', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    image: base64Image,
+                    current_fear: currentFear,
+                    last_center: lastCenter,
+                    scenario_name: "{{ scenario_name }}",
+                    level_name: "{{ target_level_name }}",
+                    target_hr: parseFloat("{{ target_hr }}")
+                })
+            });
+
+            const data = await response.json();
+            
+            currentFear = data.fear_score;
+            lastCenter = data.new_center;
+            
+            let currentHr = data.heart_rate;
+            hrDisplay.innerText = currentHr.toFixed(1);
+            hrDisplay.style.color = currentHr > 100 ? "#ef4444" : "#00f0ff";
+            
+            if (currentHr > peakHr) peakHr = currentHr;
+            endHr = currentHr; 
+
+            // High Stress Warning (Using JS to change STYLES, not classes)
+            if (data.heart_rate > 100) {
+                stimulusContainer.style.borderColor = "#ef4444";
+                stimulusContainer.style.borderWidth = "4px";
+                stimulusContainer.classList.add("panic-border");
+                
+                protocolTitle.style.color = "#ef4444";
+                protocolTitle.style.textShadow = "0 0 20px rgba(255,0,0,0.8)";
+                stimulusVideo.style.opacity = "0.8"; 
+            }
+
+            // AI AGENT OVERRIDE
+            if (data.intervention_script) {
+                isIntervening = true;
+                statusBar.innerHTML = "🛡️ AGENT OVERRIDE ACTIVE";
+                statusBar.style.borderColor = "#4ade80";
+                statusBar.style.color = "#4ade80";
+                statusBar.style.backgroundColor = "rgba(20, 83, 45, 0.5)";
+                
+                stimulusContainer.classList.remove("panic-border");
+                stimulusContainer.style.borderColor = "#4ade80";
+                stimulusContainer.style.boxShadow = "0 0 50px rgba(74,222,128,0.4)";
+                
+                protocolTitle.innerText = "🛡️ PROTOCOL OVERRIDE";
+                protocolTitle.style.color = "#4ade80";
+                protocolTitle.style.textShadow = "0 0 15px rgba(74,222,128,0.8)";
+                
+                stimulusVideo.style.opacity = "0.1"; 
+                stimulusVideo.pause(); 
+                
+                stimulusText.innerText = `"${data.intervention_script}"`;
+                stimulusText.style.fontSize = "36px";
+                stimulusText.style.fontWeight = "600";
+                stimulusText.style.textShadow = "0 0 10px rgba(255,255,255,0.5)";
+
+                if (data.audio_url) {
+                    audioPlayer.src = data.audio_url;
+                    audioPlayer.play();
+                }
+            }
+        } catch (err) { console.error("API Connection Error", err); }
+    }, 1000); 
+
+    // ABORT / END PROTOCOL LOGIC
+    abortBtn.addEventListener('click', async () => {
+        isEnding = true;
+        abortBtn.innerText = "[ SAVING DATA TO DATABASE... ]";
+        abortBtn.style.backgroundColor = "#2563eb";
+        abortBtn.style.color = "white";
+        abortBtn.style.borderColor = "#60a5fa";
+        abortBtn.style.boxShadow = "0 0 20px rgba(37,99,235,0.6)";
+        abortBtn.style.cursor = "wait";
+        
+        clearInterval(simulationInterval);
+        const stream = video.srcObject;
+        if (stream) { stream.getTracks().forEach(track => track.stop()); }
+        
+        await fetch('{% url "simulation:end_session" %}', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                peak_hr: peakHr,
+                end_hr: endHr,
+                scenario: "{{ scenario_name }}",
+                target_level: "{{ target_level_name }}"
+            })
+        });
+        
+        window.location.href = "{% url 'home:home' %}";
+    });
+</script>
+{% endblock %}

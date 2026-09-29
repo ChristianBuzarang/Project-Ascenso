@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="hud-panel p-10 w-full max-w-4xl border-t border-blue-500/30 animate-fade-in my-8">
+    
+    <div class="flex justify-center mb-6">
+        <div class="w-16 h-16 shrink-0 border-2 border-blue-500 flex items-center justify-center shadow-[0_0_15px_rgba(0,85,255,0.3)]">
+            <svg class="w-8 h-8 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 9v3m-3-3v3m3-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"></path></svg>
+        </div>
+    </div>
+
+    <h2 class="text-3xl font-bold text-center mb-8 tracking-[0.1em] text-white">NEW_AGENT_ENROLLMENT</h2>
+    
+    <form method="POST" class="flex flex-col gap-8 font-mono-tech">
+        {% csrf_token %}
+        
+        <!-- DYNAMIC TWO COLUMN GRID -->
+        <!-- Tailwind automatically splits the fields Python sends into a perfect 2-column layout -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
+            {% for field in form %}
+                <div class="flex flex-col gap-2">
+                    <label class="text-sm text-blue-400 tracking-widest">> {{ field.label|upper }}</label>
+                    {{ field }}
+                    {% if field.errors %}
+                        <span class="text-red-500 text-xs animate-pulse">! {{ field.errors.0 }}</span>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+        
+        <button type="submit" class="hud-btn mt-6 py-4 text-2xl font-bold w-full max-w-md mx-auto" style="background: linear-gradient(45deg, transparent 5%, #0033aa 5%); box-shadow: 6px 0px 0px #0055ff;">
+            INITIALIZE_CLEARANCE
+        </button>
+    </form>
+    
+    <div class="mt-8 pt-6 border-t border-blue-500/30 text-center font-mono-tech">
+        <a href="{% url 'login:login' %}" class="text-slate-400 text-base hover:text-white transition-colors">
+            <span class="text-blue-500 mr-2"><</span> RETURN_TO_AUTH
+        </a>
+    </div>
+</div>
+
+<style>
+    /* CSS for Django Input Boxes */
+    input { 
+        width: 100%; padding: 14px 16px; background-color: rgba(0,0,0,0.5); 
+        border: 1px solid #0033aa; color: #0055ff; font-family: 'Share Tech Mono', monospace; 
+        font-size: 16px; transition: all 0.3s ease;
+    }
+    input:focus { outline: none; border-color: #0055ff; box-shadow: 0 0 15px rgba(0, 85, 255, 0.4) inset; color: #ffffff; }
+    
+    .animate-fade-in { animation: fadeIn 0.4s ease-out forwards; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.98); } to { opacity: 1; transform: scale(1); } }
+</style>
+{% endblock %}

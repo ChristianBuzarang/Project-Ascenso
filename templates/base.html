@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ASCEND_OS | Neural Interface</title>
+    
+    <!-- Resource hints: open the connections early instead of waiting -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+
+    <!-- Compiled Local Tailwind CSS (Lightning Fast) -->
+    <link rel="stylesheet" href="{% static 'css/tailwind.css' %}">    
+
+    <!-- Sci-Fi Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --hud-cyan: #00f0ff;
+            --hud-blue: #0055ff;
+            --hud-red: #ff003c;
+            --bg-dark: #030508;
+        }
+        body { 
+            background-color: var(--bg-dark); 
+            color: #ffffff; 
+            font-family: 'Rajdhani', sans-serif; 
+            overflow-x: hidden;
+        }
+        
+        /* CRT Scanline Effect Overlay */
+        body::before {
+            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 999; background-size: 100% 2px, 3px 100%; pointer-events: none;
+        }
+        
+        .hud-panel {
+            background: rgba(0, 15, 30, 0.6);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1) inset;
+            position: relative;
+            backdrop-filter: blur(5px);
+        }
+        .hud-panel::before, .hud-panel::after {
+            content: ''; position: absolute; width: 15px; height: 15px; border-color: var(--hud-cyan); border-style: solid; pointer-events: none;
+        }
+        .hud-panel::before { top: -1px; left: -1px; border-width: 2px 0 0 2px; }
+        .hud-panel::after { bottom: -1px; right: -1px; border-width: 0 2px 2px 0; }
+
+        .font-mono-tech { font-family: 'Share Tech Mono', monospace; }
+        
+        .hud-btn {
+            background: linear-gradient(45deg, transparent 5%, var(--hud-blue) 5%);
+            color: white; box-shadow: 6px 0px 0px var(--hud-cyan); transition: all 0.2s ease;
+            text-transform: uppercase; letter-spacing: 2px; border: none; cursor: pointer;
+        }
+        .hud-btn:hover { background: linear-gradient(45deg, transparent 5%, var(--hud-cyan) 5%); box-shadow: 6px 0px 0px white; }
+
+        .dot-grid-bg {
+            background-image: url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMSIgY3k9IjEiIHI9IjEiIGZpbGw9InJnYmEoMCwgMjQwLCAyNTUsIDAuMTUpIi8+PC9zdmc+');
+        }
+    </style>
+</head>
+
+<!-- REMOVED HTMX hx-boost to allow charts and cameras to load safely -->
+<body class="min-h-screen flex flex-col selection:bg-cyan-500 selection:text-black">
+
+    <!--
+        Static dot-grid background moved to a CSS custom property / class
+        instead of an inline base64 data-URI recomputed in the class list
+        on every render. Same visual result, cheaper to parse.
+    -->
+    <div class="fixed inset-0 dot-grid-bg z-[-1]"></div>
+
+    <!-- Terminal Navigation Bar -->
+    <nav class="hud-panel w-full p-4 flex justify-between items-center z-50">
+        <div class="flex items-center gap-4">
+            <div class="w-10 h-10 border-2 border-cyan-400 flex items-center justify-center animate-pulse shadow-[0_0_10px_#00f0ff]">
+                <div class="w-4 h-4 bg-cyan-400"></div>
+            </div>
+            <a href="{% url 'home:home' %}" class="text-3xl font-bold tracking-[0.2em] text-cyan-400 drop-shadow-[0_0_8px_rgba(0,240,255,0.8)]">
+                ASCEND<span class="text-white">_OS</span>
+            </a>
+        </div>
+        
+        <div class="flex items-center gap-6 font-mono-tech text-sm tracking-widest">
+            {% if user.is_authenticated %}
+                <span class="text-cyan-400">NET_STATUS: <span class="text-white animate-pulse">SECURE</span></span>
+                <span class="text-slate-500">||</span>
+                <span class="text-cyan-400">ID: <span class="text-white">{{ user.username|upper }}</span></span>
+                
+                {% if user.is_superuser %}
+                    <a href="/admin" target="_blank" class="ml-4 text-purple-400 hover:text-purple-300 transition-colors">[ SYS.ADMIN ]</a>
+                {% endif %}
+                <a href="{% url 'user_profile:profile' %}" class="ml-4 text-slate-400 hover:text-cyan-400 transition-colors">[ PROFILE ]</a>
+                <a href="{% url 'user_settings:settings' %}" class="ml-4 text-slate-400 hover:text-cyan-400 transition-colors">[ SETTINGS ]</a>
+                <a href="{% url 'login:logout' %}" class="ml-4 text-red-500 hover:text-red-400 transition-colors">[ TERMINATE_LINK ]</a>
+            {% else %}
+                <a href="{% url 'login:login' %}" class="text-cyan-400 hover:text-white transition-colors">[ INIT_AUTH ]</a>
+                <a href="{% url 'register:register' %}" class="text-cyan-400 hover:text-white transition-colors">[ REGISTER ]</a>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main id="main-content" class="flex-grow flex items-center justify-center p-6 relative z-10 transition-all duration-300">
+        <div class="z-10 w-full flex justify-center">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+</body>
+</html>

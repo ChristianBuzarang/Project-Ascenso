@@ -1,0 +1,32 @@
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environments
+venv/
+.venv/
+env/
+
+# Database Files
+*.sqlite3
+*.sqlite
+*.db
+
+# Secrets & API Keys
+.env
+
+# Generated AI Media (Optional: keeps the repo clean of old test files)
+*.mp3
+*.pdf
+
+# OS Generated Files
+.DS_Store
+Thumbs.db
+
+# Node & Tailwind Compiler
+node_modules/
+package-lock.json
+
+# User Uploaded Media
+media/

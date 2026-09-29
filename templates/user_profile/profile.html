@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+<div class="fixed top-20 right-6 z-50 flex flex-col gap-2">
+    {% for message in messages %}
+    <div class="glass-panel px-6 py-4 rounded-xl border-l-4 border-green-400 shadow-[0_0_20px_rgba(74,222,128,0.2)] flex items-center gap-3 slide-in-toast">
+        <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        <span class="text-white font-mono-tech tracking-wider text-lg">{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="profile-wrap">
+
+    <!-- Avatar: always visible circle, default initial letter if no photo -->
+    <div class="avatar-wrap">
+        <div class="avatar-circle">
+            <!--
+                Using inline display:none/block set directly by Django here
+                instead of a toggled CSS class. A class toggle depends on an
+                external stylesheet loading with the right specificity/order
+                to actually hide or show anything — inline styles can't be
+                broken by that, so this can't silently fail again the way
+                the class-based version did.
+            -->
+            <span id="avatar-placeholder" class="avatar-letter" style="{% if profile.profile_image and profile.profile_image.name %}display:none;{% endif %}">
+                {{ user.username|make_list|first|upper }}
+            </span>
+            <img id="avatar-preview" src="{% if profile.profile_image and profile.profile_image.name %}{{ profile.profile_image.url }}{% endif %}"
+                 class="avatar-img" style="{% if not profile.profile_image or not profile.profile_image.name %}display:none;{% endif %}">
+        </div>
+        <label class="avatar-edit-badge" title="Change photo">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#04141a" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M12 13a3 3 0 100 6 3 3 0 000-6z"></path></svg>
+            <input type="file" id="file-upload" name="profile_image" accept="image/*" onchange="previewImage(event)" class="visually-hidden" form="profile-form">
+        </label>
+    </div>
+    <p class="avatar-hint">Click the camera icon to upload a photo. PNG or JPG.</p>
+
+    <div class="profile-card hud-panel">
+        <h2 class="username-title">{{ user.username|upper }}</h2>
+        <p class="subtitle">OPERATOR_PROFILE</p>
+
+        <form id="profile-form" method="POST" enctype="multipart/form-data" class="profile-form">
+            {% csrf_token %}
+
+            <div class="field">
+                <label class="field-label">&gt; FULL DESIGNATION</label>
+                <input type="text" name="full_name" value="{{ profile.full_name }}" placeholder="e.g. John Doe">
+            </div>
+
+            <div class="field">
+                <label class="field-label">&gt; BIO</label>
+                <textarea name="bio" rows="3" placeholder="Tell us about yourself...">{{ profile.bio }}</textarea>
+            </div>
+
+            <button type="submit" class="hud-btn-chunky">SAVE CHANGES</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    function previewImage(event) {
+        const reader = new FileReader();
+        reader.onload = function() {
+            const output = document.getElementById('avatar-preview');
+            const placeholder = document.getElementById('avatar-placeholder');
+            output.src = reader.result;
+            output.style.display = 'block';
+            placeholder.style.display = 'none';
+        };
+        if(event.target.files[0]) { reader.readAsDataURL(event.target.files[0]); }
+    }
+    setTimeout(() => {
+        document.querySelectorAll('.slide-in-toast').forEach(toast => {
+            toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)';
+            toast.style.transition = 'all 0.5s ease';
+            setTimeout(() => toast.remove(), 500);
+        });
+    }, 4000);
+</script>
+
+<style>
+    /* Plain CSS for all structural sizing — never depends on the Tailwind
+       build having scanned these classes, so it can't silently break again
+       if tailwind.css goes stale. */
+
+    .visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); }
+
+    .profile-wrap {
+        max-width: 440px;
+        width: 100%;
+        margin: 2.5rem auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .avatar-wrap {
+        position: relative;
+        margin-bottom: -48px;
+        z-index: 20;
+    }
+    .avatar-circle {
+        width: 112px;
+        height: 112px;
+        border-radius: 9999px;
+        border: 4px solid #030508;
+        background: #0f172a;
+        box-shadow: 0 0 20px rgba(0,255,255,0.25);
+        overflow: hidden;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .avatar-letter { font-size: 2.5rem; font-weight: 900; color: #0891b2; }
+    .avatar-img {
+        position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover;
+    }
+    .avatar-edit-badge {
+        position: absolute; bottom: 0; right: 0;
+        width: 36px; height: 36px; border-radius: 9999px;
+        background: #22d3ee; border: 2px solid #030508;
+        display: flex; align-items: center; justify-content: center;
+        cursor: pointer; box-shadow: 0 0 10px rgba(0,255,255,0.5);
+        transition: background 0.15s ease;
+    }
+    .avatar-edit-badge:hover { background: #67e8f9; }
+    .avatar-hint {
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.8rem;
+        color: #64748b;
+        margin-top: 60px;
+        margin-bottom: 0.5rem;
+        text-align: center;
+    }
+
+    .profile-card {
+        width: 100%;
+        border-radius: 24px;
+        padding: 2rem 2rem 2.25rem;
+        padding-top: 3.75rem;
+        text-align: center;
+    }
+    .username-title { font-size: 1.85rem; font-weight: 800; letter-spacing: 0.08em; color: #fff; }
+    .subtitle { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: #64748b; letter-spacing: 0.2em; margin-bottom: 1.75rem; }
+
+    .profile-form { display: flex; flex-direction: column; gap: 1.5rem; font-family: 'Share Tech Mono', monospace; text-align: left; }
+    .field { display: flex; flex-direction: column; gap: 0.5rem; }
+    .field-label { font-size: 0.9rem; letter-spacing: 0.15em; color: #22d3ee; }
+
+    input[type="text"], textarea {
+        width: 100%; padding: 13px 15px; background-color: rgba(0,0,0,0.5);
+        border: 1px solid #0055ff; border-radius: 12px; color: #00f0ff;
+        font-family: 'Share Tech Mono', monospace; font-size: 16px; resize: none;
+    }
+    input:focus, textarea:focus { outline: none; border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) inset; color: #ffffff; }
+
+    /* Gap between the last field and the button, so they never touch */
+    .hud-btn-chunky {
+        margin-top: 0.5rem;
+        width: 100%; padding: 15px 0; background: #00c2d1; color: #04141a; font-weight: 800;
+        letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 16px;
+        font-size: 1rem; border-bottom: 4px solid #007c86; cursor: pointer; transition: all 0.1s ease;
+    }
+    .hud-btn-chunky:hover { background: #1fd6e6; }
+    .hud-btn-chunky:active { border-bottom-width: 0px; transform: translateY(4px); }
+
+    .slide-in-toast { animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
+</style>
+{% endblock %}
