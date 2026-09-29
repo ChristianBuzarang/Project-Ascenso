@@ -8,6 +8,9 @@ class UserDevice(models.Model):
     mac_address = models.CharField(max_length=100)
     is_active = models.BooleanField(default=True)
 
+    class Meta:
+        db_table = "user_device"
+
     def __str__(self):
         return f"{self.device_name} ({self.user.username})"
 
@@ -17,10 +20,11 @@ class FearScenario(models.Model):
     category = models.CharField(max_length=50)
     name = models.CharField(max_length=150)
     description = models.TextField()
-    media_file = models.CharField(
-        max_length=255
-    )  # Can be changed to FileField later if needed
+    media_file = models.CharField(max_length=255)
     is_active = models.BooleanField(default=True)
+
+    class Meta:
+        db_table = "fear_scenario"
 
     def __str__(self):
         return f"[{self.category}] {self.name}"
@@ -40,6 +44,9 @@ class AscensionRecord(models.Model):
     report_pdf_url = models.CharField(max_length=255, blank=True, null=True)
     raw_biometric_url = models.CharField(max_length=255, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = "ascension_record"
 
     def __str__(self):
         username = self.user.username if self.user else "Anonymous"
