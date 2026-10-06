@@ -20,7 +20,7 @@ class FearScenario(models.Model):
     category = models.CharField(max_length=50)
     name = models.CharField(max_length=150)
     description = models.TextField()
-    media_file = models.CharField(max_length=255)
+    media_file = models.TextField()
     is_active = models.BooleanField(default=True)
 
     class Meta:

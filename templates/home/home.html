@@ -26,34 +26,49 @@
                 <span class="text-cyan-400 mr-2">■</span> Protocol Config
             </h3>
             
-            <form action="{% url 'simulation:immersive_room' %}" method="GET" class="flex flex-col gap-8 font-mono-tech">
-                <div>
-                    <!-- Target Scenarios: -->
-                    <label class="block text-cyan-400 mb-3 text-lg font-bold">> TARGET_SCENARIO</label>
-                    <!-- Increased text size to text-lg and padding to p-4 -->
-                    <select name="scenario" class="w-full bg-slate-900/80 border border-cyan-500/50 text-white text-lg p-4 outline-none focus:border-cyan-400 hover:bg-slate-800 transition-colors cursor-pointer appearance-none">
-                        {% for scenario in scenarios %}
-                            <option value="{{ scenario.id }}">{{ scenario.name }}</option>
-                        {% endfor %}
-                    </select>
+            <form action="{% url 'simulation:immersive_room' %}" method="GET" class="flex flex-col gap-6 font-mono-tech">
+                
+                <!-- NEW: Category Dropdown -->
+                <div class="group">
+                    <label class="block text-xs font-bold text-cyan-400 tracking-[0.1em] mb-2">> TARGET_CATEGORY</label>
+                    <div class="relative">
+                        <select id="category-select" class="w-full appearance-none bg-slate-900/80 border border-slate-700 text-slate-200 text-sm px-4 py-4 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer">
+                            <!-- Populated by JavaScript -->
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500">▼</div>
+                    </div>
                 </div>
 
-                <div>
-                    <!-- Override Threshold - Levels: -->
-                    <label class="block text-red-400 mb-3 text-lg font-bold">> OVERRIDE_THRESHOLD</label>
-                    <select name="level" class="w-full bg-slate-900/80 border border-red-500/50 text-white text-lg p-4 outline-none focus:border-red-400 hover:bg-slate-800 transition-colors cursor-pointer appearance-none">
-                        {% for key, name in levels.items %}
-                            <option value="{{ key }}">{{ name }}</option>
-                        {% endfor %}
-                    </select>
+                <!-- NEW: Specific Scenario Dropdown -->
+                <div class="group">
+                    <label class="block text-xs font-bold text-cyan-400 tracking-[0.1em] mb-2">> SPECIFIC_PROTOCOL</label>
+                    <div class="relative">
+                        <select id="scenario-select" name="scenario" class="w-full appearance-none bg-slate-900/80 border border-slate-700 text-slate-200 text-sm px-4 py-4 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer">
+                            <!-- Populated by JavaScript based on Category -->
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500">▼</div>
+                    </div>
                 </div>
 
-                <!-- Simulation Starts: -->
+                <!-- Level Dropdown (Unchanged) -->
+                <div class="group">
+                    <label class="block text-xs font-bold text-red-400 tracking-[0.1em] mb-2">> OVERRIDE_THRESHOLD</label>
+                    <div class="relative">
+                        <select name="level" class="w-full appearance-none bg-slate-900/80 border border-red-500/50 text-white text-sm px-4 py-4 rounded-xl outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all cursor-pointer">
+                            {% for key, name in levels.items %}
+                                <option value="{{ key }}">{{ name }}</option>
+                            {% endfor %}
+                        </select>
+                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-red-500">▼</div>
+                    </div>
+                </div>
+
+                <!-- Initiate Button -->
                 <button type="submit" class="hud-btn mt-8 py-5 text-2xl font-black tracking-[0.2em]">
                     EXECUTE_PROTOCOL
                 </button>
             </form>
-        </div>
+    </div>
 
         <!-- Right: Analytics Screen -->
         <div class="col-span-1 md:col-span-7 hud-panel p-8 flex flex-col">
@@ -98,6 +113,42 @@
         const clockElement = document.getElementById('sys-clock');
         if (clockElement) clockElement.innerText = new Date().toLocaleTimeString('en-US', {hour12: false, hour: '2-digit', minute:'2-digit', second:'2-digit'});
     }, 1000);
+
+    // --- CASCADING DROPDOWN LOGIC ---
+    const groupedScenarios = {{ categories_json|safe }};
+    const categorySelect = document.getElementById('category-select');
+    const scenarioSelect = document.getElementById('scenario-select');
+
+    // Populate the first dropdown with Categories (keys from the JSON)
+    for (const category in groupedScenarios) {
+        let option = document.createElement('option');
+        option.value = category;
+        option.textContent = category;
+        categorySelect.appendChild(option);
+    }
+
+    // Function to update the second dropdown based on the first
+    function updateScenarios() {
+        scenarioSelect.innerHTML = ''; // Clear old options
+        const selectedCategory = categorySelect.value;
+        
+        if (groupedScenarios[selectedCategory]) {
+            groupedScenarios[selectedCategory].forEach(scenario => {
+                let option = document.createElement('option');
+                option.value = scenario.id; // Sends the DB ID to the server
+                option.textContent = scenario.name; // Shows the readable name
+                scenarioSelect.appendChild(option);
+            });
+        }
+    }
+
+    // Listen for changes and run on load
+    categorySelect.addEventListener('change', updateScenarios);
+    
+    // Initialize the second dropdown when the page first loads
+    if (Object.keys(groupedScenarios).length > 0) {
+        updateScenarios();
+    }
 
     // BACKGROUND DATA FETCH (Lazy Loading)
     document.addEventListener("DOMContentLoaded", async function() {

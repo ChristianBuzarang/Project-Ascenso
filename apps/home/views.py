@@ -21,10 +21,16 @@ def home_view(request):
     """Loads the Dashboard HTML"""
     records = AscensionRecord.objects.filter(user=request.user)
 
-    scenarios = FearScenario.objects.filter(is_active=True)
+    scenarios = FearScenario.objects.filter(is_active=True).order_by("category", "name")
+
+    categorized_scenarios = {}
+    for s in scenarios:
+        if s.category not in categorized_scenarios:
+            categorized_scenarios[s.category] = []
+        categorized_scenarios[s.category].append({"id": s.id, "name": s.name})
 
     context = {
-        "scenarios": scenarios,
+        "categories_json": json.dumps(categorized_scenarios),
         "levels": FEAR_LEVELS,
         "has_history": len(records) > 0,
     }
