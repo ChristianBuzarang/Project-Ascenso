@@ -28,9 +28,9 @@
             
             <form action="{% url 'simulation:immersive_room' %}" method="GET" class="flex flex-col gap-6 font-mono-tech">
                 
-                <!-- NEW: Category Dropdown -->
+                <!-- Category Dropdown -->
                 <div class="group">
-                    <label class="block text-xs font-bold text-cyan-400 tracking-[0.1em] mb-2">> TARGET_CATEGORY</label>
+                    <label class="block text-[15px] font-bold text-cyan-400 tracking-[0.1em] mb-2">> TARGET_CATEGORY</label>
                     <div class="relative">
                         <select id="category-select" class="w-full appearance-none bg-slate-900/80 border border-slate-700 text-slate-200 text-sm px-4 py-4 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer">
                             <!-- Populated by JavaScript -->
@@ -39,9 +39,9 @@
                     </div>
                 </div>
 
-                <!-- NEW: Specific Scenario Dropdown -->
+                <!-- Specific Scenario Dropdown -->
                 <div class="group">
-                    <label class="block text-xs font-bold text-cyan-400 tracking-[0.1em] mb-2">> SPECIFIC_PROTOCOL</label>
+                    <label class="block text-[15px] font-bold text-cyan-400 tracking-[0.1em] mb-2">> SPECIFIC_PROTOCOL</label>
                     <div class="relative">
                         <select id="scenario-select" name="scenario" class="w-full appearance-none bg-slate-900/80 border border-slate-700 text-slate-200 text-sm px-4 py-4 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer">
                             <!-- Populated by JavaScript based on Category -->
@@ -52,7 +52,7 @@
 
                 <!-- Level Dropdown (Unchanged) -->
                 <div class="group">
-                    <label class="block text-xs font-bold text-red-400 tracking-[0.1em] mb-2">> OVERRIDE_THRESHOLD</label>
+                    <label class="block text-[15px] font-bold text-red-400 tracking-[0.1em] mb-2">> OVERRIDE_THRESHOLD</label>
                     <div class="relative">
                         <select name="level" class="w-full appearance-none bg-slate-900/80 border border-red-500/50 text-white text-sm px-4 py-4 rounded-xl outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all cursor-pointer">
                             {% for key, name in levels.items %}
