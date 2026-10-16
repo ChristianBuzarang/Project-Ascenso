@@ -9,6 +9,7 @@ class UserSettings(models.Model):
 
     class Meta:
         db_table = "user_settings"
+        verbose_name_plural = "User Settings"
 
     def __str__(self):
         return f"Settings for {self.user.username}"

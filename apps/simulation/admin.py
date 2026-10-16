@@ -1,9 +1,10 @@
 from django.contrib import admin
+from unfold.admin import ModelAdmin
 from .models import AscensionRecord, FearScenario, UserDevice
 
 
 @admin.register(AscensionRecord)
-class AscensionRecordAdmin(admin.ModelAdmin):
+class AscensionRecordAdmin(ModelAdmin):
     # This dictates what columns the Admin sees in the database viewer
     list_display = ("user", "scenario", "target_level", "peak_hr", "timestamp")
 
@@ -15,12 +16,12 @@ class AscensionRecordAdmin(admin.ModelAdmin):
 
 
 @admin.register(FearScenario)
-class FearScenarioAdmin(admin.ModelAdmin):
+class FearScenarioAdmin(ModelAdmin):
     list_display = ("name", "category", "is_active", "created_by")
     list_filter = ("category", "is_active")
     search_fields = ("name", "category")
 
 
 @admin.register(UserDevice)
-class UserDeviceAdmin(admin.ModelAdmin):
+class UserDeviceAdmin(ModelAdmin):
     list_display = ("device_name", "user", "mac_address", "is_active")

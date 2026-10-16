@@ -1,0 +1,77 @@
+/* IMPORT SCI-FI FONTS */
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Share+Tech+Mono&display=swap');
+
+/* FORCE FONTS GLOBALLY (Without breaking icons!) */
+body, div, p, a, h1, h2, h3, h4, h5, h6 {
+    font-family: 'Rajdhani', sans-serif;
+}
+
+/* 🛡️ PROTECT MATERIAL ICONS FROM BEING OVERWRITTEN */
+.material-symbols-outlined, 
+.material-symbols-rounded, 
+.material-icons, 
+span.material-symbols-outlined {
+    font-family: 'Material Symbols Outlined' !important;
+}
+
+/* FORCE DEEP DARK BACKGROUNDS */
+body, .bg-gray-50, .bg-white, .dark\:bg-gray-900, .dark\:bg-gray-800, main, nav, header, aside {
+    background-color: #030508 !important;
+    color: #ffffff !important;
+}
+
+/* CRT SCANLINE EFFECT */
+body::before {
+    content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
+    background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), 
+                linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+    z-index: 9999; background-size: 100% 2px, 3px 100%; pointer-events: none;
+}
+
+/* CYBERPUNK BUTTONS */
+button, .bg-primary-600, .bg-primary-500, input[type="submit"] {
+    background: linear-gradient(135deg, #0072ff, #00c6ff) !important;
+    border: none !important;
+    box-shadow: 0 4px 15px rgba(0, 198, 255, 0.4) !important;
+    color: white !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    letter-spacing: 1px !important;
+    border-radius: 8px !important;
+    transition: all 0.3s ease !important;
+}
+button:hover, .bg-primary-600:hover, input[type="submit"]:hover {
+    box-shadow: 0 6px 20px rgba(0, 198, 255, 0.7) !important;
+    transform: translateY(-2px);
+}
+
+/* HUD BORDERS & TABLES */
+table, th, td, .border-gray-200, .dark\:border-gray-700, .dark\:border-gray-800 {
+    border-color: rgba(0, 240, 255, 0.2) !important;
+}
+
+/* TABLE HEADERS (Mono Font) */
+th, th span, th a {
+    font-family: 'Share Tech Mono', monospace !important;
+    color: #00f0ff !important;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* INPUT BOXES */
+input[type="text"], input[type="password"], input[type="email"], select, textarea {
+    background-color: rgba(0,0,0,0.5) !important;
+    border: 1px solid #0055ff !important;
+    color: #00f0ff !important;
+    font-family: 'Share Tech Mono', monospace !important;
+    border-radius: 8px !important;
+}
+input:focus, select:focus, textarea:focus {
+    outline: none !important;
+    border-color: #00f0ff !important;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.3) inset !important;
+}
+
+/* SIDEBAR LOGO & TEXT */
+.text-gray-900, .dark\:text-gray-100 {
+    color: #00f0ff !important;
+}

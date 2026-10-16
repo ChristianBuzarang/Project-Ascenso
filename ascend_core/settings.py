@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/6.1/ref/settings/
 
 import os
 from pathlib import Path
+from django.templatetags.static import static
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +33,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "unfold",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -110,6 +112,31 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+
+# ASCEND_OS ADMIN PANEL THEMING (UNFOLD)
+UNFOLD = {
+    "SITE_TITLE": "ASCEND_OS | System Administration",
+    "SITE_HEADER": "ASCEND_OS",
+    "SITE_URL": "/",
+    "STYLES": [
+        lambda request: static("css/admin_theme.css"),
+    ],
+    "COLORS": {
+        "primary": {
+            "50": "#ecfeff",
+            "100": "#cffafe",
+            "200": "#a5f3fc",
+            "300": "#67e8f9",
+            "400": "#22d3ee",
+            "500": "#00c6ff",
+            "600": "#0072ff",
+            "700": "#0e7490",
+            "800": "#155e75",
+            "900": "#164e63",
+        },
+    },
+}
 
 
 # Internationalization
