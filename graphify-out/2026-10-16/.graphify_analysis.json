@@ -1,0 +1,434 @@
+{
+  "communities": {
+    "0": [
+      "apps_home_views",
+      "apps_home_views_chart_data_api",
+      "apps_home_views_home_view",
+      "apps_home_views_py_login_required",
+      "apps_home_views_rationale_21",
+      "apps_home_views_rationale_42",
+      "apps_simulation_ai_agent",
+      "apps_simulation_models_ascensionrecord",
+      "apps_simulation_models_ascensionrecord_meta",
+      "apps_simulation_models_ascensionrecord_str",
+      "apps_simulation_models_fearscenario",
+      "apps_simulation_models_fearscenario_meta",
+      "apps_simulation_models_fearscenario_str",
+      "apps_simulation_views",
+      "apps_simulation_views_end_session_api",
+      "apps_simulation_views_immersive_room_view",
+      "apps_simulation_views_process_frame_api",
+      "apps_simulation_views_py_login_required",
+      "apps_simulation_views_rationale_92",
+      "base64",
+      "csrf_exempt",
+      "cv2",
+      "django_http",
+      "django_views_decorators_csrf",
+      "google",
+      "gtts",
+      "json",
+      "numpy",
+      "pandas",
+      "sklearn_ensemble",
+      "time"
+    ],
+    "1": [
+      "apps_user_profile_admin",
+      "apps_user_profile_admin_patientadmin",
+      "apps_user_profile_admin_professionaladmin",
+      "apps_user_profile_admin_professionalassignmentadmin",
+      "apps_user_profile_admin_profileadmin",
+      "apps_user_profile_admin_py_modeladmin",
+      "apps_user_profile_admin_py_register",
+      "apps_user_profile_init",
+      "apps_user_profile_models",
+      "apps_user_profile_models_patient",
+      "apps_user_profile_models_patient_meta",
+      "apps_user_profile_models_patient_str",
+      "apps_user_profile_models_professional",
+      "apps_user_profile_models_professional_meta",
+      "apps_user_profile_models_professional_str",
+      "apps_user_profile_models_professionalassignment",
+      "apps_user_profile_models_professionalassignment_meta",
+      "apps_user_profile_models_professionalassignment_str",
+      "apps_user_profile_models_profile",
+      "apps_user_profile_models_profile_meta",
+      "apps_user_profile_models_profile_str",
+      "apps_user_profile_urls",
+      "apps_user_profile_views",
+      "apps_user_profile_views_profile_view",
+      "apps_user_profile_views_py_login_required",
+      "django_contrib_auth_decorators"
+    ],
+    "2": [
+      "apps_home_admin",
+      "apps_login_admin",
+      "apps_register_admin",
+      "apps_user_settings_admin",
+      "apps_user_settings_admin_py_modeladmin",
+      "apps_user_settings_admin_py_register",
+      "apps_user_settings_admin_usersettingsadmin",
+      "apps_user_settings_init",
+      "apps_user_settings_models",
+      "apps_user_settings_models_usersettings",
+      "apps_user_settings_models_usersettings_meta",
+      "apps_user_settings_models_usersettings_str",
+      "apps_user_settings_urls",
+      "apps_user_settings_views",
+      "apps_user_settings_views_py_login_required",
+      "apps_user_settings_views_settings_view",
+      "django_contrib",
+      "django_contrib_auth",
+      "django_contrib_auth_models",
+      "unfold_admin"
+    ],
+    "3": [
+      "apps_home_init",
+      "apps_home_urls",
+      "apps_login_urls",
+      "apps_login_views",
+      "apps_login_views_login_view",
+      "apps_login_views_logout_view",
+      "apps_register_urls",
+      "apps_register_views",
+      "apps_register_views_extendedregistrationform",
+      "apps_register_views_extendedregistrationform_meta",
+      "apps_register_views_register_view",
+      "apps_simulation_init",
+      "apps_simulation_urls",
+      "ascend_core_urls",
+      "django",
+      "django_conf_urls_static",
+      "django_contrib_auth_forms",
+      "django_shortcuts",
+      "django_urls",
+      "usercreationform"
+    ],
+    "4": [
+      "apps_home_apps",
+      "apps_home_apps_homeconfig",
+      "apps_home_apps_py_appconfig",
+      "apps_login_apps",
+      "apps_login_apps_loginconfig",
+      "apps_login_apps_py_appconfig",
+      "apps_register_apps",
+      "apps_register_apps_py_appconfig",
+      "apps_register_apps_registerconfig",
+      "apps_simulation_apps",
+      "apps_simulation_apps_py_appconfig",
+      "apps_simulation_apps_simulationconfig",
+      "apps_user_profile_apps",
+      "apps_user_profile_apps_py_appconfig",
+      "apps_user_profile_apps_userprofileconfig",
+      "apps_user_settings_apps",
+      "apps_user_settings_apps_py_appconfig",
+      "apps_user_settings_apps_usersettingsconfig",
+      "django_apps"
+    ],
+    "5": [
+      "ascend_core_asgi",
+      "ascend_core_asgi_rationale_1",
+      "ascend_core_settings",
+      "ascend_core_settings_rationale_1",
+      "ascend_core_wsgi",
+      "ascend_core_wsgi_rationale_1",
+      "django_core_asgi",
+      "django_core_wsgi",
+      "django_templatetags_static",
+      "manage",
+      "manage_main",
+      "manage_rationale_2",
+      "manage_rationale_8",
+      "os",
+      "pathlib",
+      "sys"
+    ],
+    "6": [
+      "simulation_end_session",
+      "simulation_process_frame",
+      "templates_base_html",
+      "templates_home_home_html",
+      "templates_login_login",
+      "templates_login_login_html",
+      "templates_register_register",
+      "templates_register_register_html",
+      "templates_simulation_immersive_html",
+      "templates_user_profile_profile",
+      "templates_user_profile_profile_html",
+      "templates_user_settings_settings",
+      "templates_user_settings_settings_html"
+    ],
+    "7": [
+      "apps_home_models",
+      "apps_login_models",
+      "apps_register_models",
+      "apps_simulation_migrations_0001_initial",
+      "apps_simulation_migrations_0001_initial_migration",
+      "apps_user_profile_migrations_0001_initial",
+      "apps_user_profile_migrations_0001_initial_migration",
+      "apps_user_settings_migrations_0001_initial",
+      "apps_user_settings_migrations_0001_initial_migration",
+      "django_conf",
+      "django_db",
+      "django_db_models_deletion"
+    ],
+    "8": [
+      "apps_simulation_admin",
+      "apps_simulation_admin_ascensionrecordadmin",
+      "apps_simulation_admin_fearscenarioadmin",
+      "apps_simulation_admin_py_modeladmin",
+      "apps_simulation_admin_py_register",
+      "apps_simulation_admin_userdeviceadmin",
+      "apps_simulation_models",
+      "apps_simulation_models_userdevice",
+      "apps_simulation_models_userdevice_meta",
+      "apps_simulation_models_userdevice_str"
+    ],
+    "9": [
+      "apps_home_tests",
+      "apps_login_tests",
+      "apps_register_tests",
+      "apps_simulation_tests",
+      "apps_user_profile_tests",
+      "apps_user_settings_tests",
+      "django_test"
+    ],
+    "10": [
+      "apps_simulation_ai_agent_ascendagent",
+      "apps_simulation_ai_agent_ascendagent_actuate_override",
+      "apps_simulation_ai_agent_ascendagent_analyze_frame",
+      "apps_simulation_ai_agent_ascendagent_init",
+      "apps_simulation_ai_agent_ascendagent_perceive",
+      "apps_simulation_ai_agent_rationale_94"
+    ],
+    "11": [
+      "package",
+      "package_devdependencies",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_cli",
+      "ref_tailwindcss",
+      "ref_tailwindcss_cli"
+    ],
+    "12": [
+      "apps_home_migrations_init"
+    ],
+    "13": [
+      "apps_login_init"
+    ],
+    "14": [
+      "apps_login_migrations_init"
+    ],
+    "15": [
+      "apps_register_init"
+    ],
+    "16": [
+      "apps_register_migrations_init"
+    ],
+    "17": [
+      "apps_simulation_migrations_init"
+    ],
+    "18": [
+      "apps_simulation_scenarios"
+    ],
+    "19": [
+      "apps_user_profile_migrations_init"
+    ],
+    "20": [
+      "apps_user_settings_migrations_init"
+    ],
+    "21": [
+      "ascend_core_init"
+    ],
+    "22": [
+      "static_js_cv_sensor"
+    ],
+    "23": [
+      "static_js_live_charts"
+    ],
+    "24": [
+      "tailwind_config"
+    ],
+    "25": [
+      "templates_home_home"
+    ],
+    "26": [
+      "templates_home_home_chart_data"
+    ]
+  },
+  "cohesion": {
+    "0": 0.1053763440860215,
+    "1": 0.11384615384615385,
+    "2": 0.12105263157894737,
+    "3": 0.1368421052631579,
+    "4": 0.10526315789473684,
+    "5": 0.125,
+    "6": 0.15384615384615385,
+    "7": 0.22727272727272727,
+    "8": 0.3111111111111111,
+    "9": 0.2857142857142857,
+    "10": 0.3333333333333333,
+    "11": 0.3333333333333333,
+    "12": 1.0,
+    "13": 1.0,
+    "14": 1.0,
+    "15": 1.0,
+    "16": 1.0,
+    "17": 1.0,
+    "18": 1.0,
+    "19": 1.0,
+    "20": 1.0,
+    "21": 1.0,
+    "22": 1.0,
+    "23": 1.0,
+    "24": 1.0,
+    "25": 1.0,
+    "26": 1.0
+  },
+  "gods": [
+    {
+      "id": "apps_simulation_models_ascensionrecord",
+      "label": "AscensionRecord",
+      "degree": 9
+    },
+    {
+      "id": "apps_simulation_models_fearscenario",
+      "label": "FearScenario",
+      "degree": 9
+    },
+    {
+      "id": "apps_user_profile_models_profile",
+      "label": "Profile",
+      "degree": 6
+    },
+    {
+      "id": "apps_simulation_ai_agent_ascendagent",
+      "label": "AscendAgent",
+      "degree": 6
+    },
+    {
+      "id": "apps_user_settings_models_usersettings",
+      "label": "UserSettings",
+      "degree": 6
+    },
+    {
+      "id": "apps_home_views_home_view",
+      "label": "home_view()",
+      "degree": 6
+    },
+    {
+      "id": "apps_simulation_views_end_session_api",
+      "label": "end_session_api()",
+      "degree": 6
+    },
+    {
+      "id": "apps_simulation_views_process_frame_api",
+      "label": "process_frame_api()",
+      "degree": 6
+    },
+    {
+      "id": "templates_base_html",
+      "label": "Base HTML Template",
+      "degree": 6
+    },
+    {
+      "id": "apps_user_profile_models_patient",
+      "label": "Patient",
+      "degree": 4
+    }
+  ],
+  "surprises": [
+    {
+      "source": "chart_data_api()",
+      "target": "AscensionRecord",
+      "source_files": [
+        "apps/home/views.py",
+        "apps/simulation/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    },
+    {
+      "source": "home_view()",
+      "target": "AscensionRecord",
+      "source_files": [
+        "apps/home/views.py",
+        "apps/simulation/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    },
+    {
+      "source": "end_session_api()",
+      "target": "AscensionRecord",
+      "source_files": [
+        "apps/simulation/views.py",
+        "apps/simulation/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    },
+    {
+      "source": "home_view()",
+      "target": "FearScenario",
+      "source_files": [
+        "apps/home/views.py",
+        "apps/simulation/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    },
+    {
+      "source": "end_session_api()",
+      "target": "FearScenario",
+      "source_files": [
+        "apps/simulation/views.py",
+        "apps/simulation/models.py"
+      ],
+      "confidence": "INFERRED",
+      "relation": "uses",
+      "why": "inferred connection - not explicitly stated in source"
+    }
+  ],
+  "questions": [
+    {
+      "type": "bridge_node",
+      "question": "Why does `AscensionRecord` connect `simulation/views.py` to `simulation/admin.py`?",
+      "why": "High betweenness centrality (0.037) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 3 inferred relationships involving `AscensionRecord` (e.g. with `chart_data_api()` and `home_view()`) actually correct?",
+      "why": "`AscensionRecord` has 3 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "isolated_nodes",
+      "question": "What connects `tailwindcss`, `@tailwindcss/cli`, `Home` to the rest of the system?",
+      "why": "11 weakly-connected nodes found - possible documentation gaps or missing edges."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `simulation/views.py` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.1053763440860215 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "bridge_node",
+      "question": "Why does `AscendAgent` connect `AscendAgent` to `simulation/views.py`?",
+      "why": "High betweenness centrality (0.034) - this node is a cross-community bridge."
+    },
+    {
+      "type": "verify_inferred",
+      "question": "Are the 3 inferred relationships involving `FearScenario` (e.g. with `home_view()` and `end_session_api()`) actually correct?",
+      "why": "`FearScenario` has 3 INFERRED edges - model-reasoned connections that need verification."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `user_profile/admin.py` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.11384615384615385 - nodes in this community are weakly interconnected."
+    }
+  ]
+}
