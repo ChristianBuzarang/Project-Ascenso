@@ -35,3 +35,5 @@ media/
 .obsidian/workspace.json
 .obsidian/workspace-mobile.json
 .obsidian/cache/
+.obsidian/starred.json
+.obsidian/backlinks/
