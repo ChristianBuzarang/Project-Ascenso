@@ -8,6 +8,12 @@
       "apps_home_views_rationale_21",
       "apps_home_views_rationale_42",
       "apps_simulation_ai_agent",
+      "apps_simulation_ai_agent_ascendagent",
+      "apps_simulation_ai_agent_ascendagent_actuate_override",
+      "apps_simulation_ai_agent_ascendagent_analyze_frame",
+      "apps_simulation_ai_agent_ascendagent_init",
+      "apps_simulation_ai_agent_ascendagent_perceive",
+      "apps_simulation_ai_agent_rationale_94",
       "apps_simulation_models_ascensionrecord",
       "apps_simulation_models_ascensionrecord_meta",
       "apps_simulation_models_ascensionrecord_str",
@@ -41,7 +47,6 @@
       "apps_user_profile_admin_profileadmin",
       "apps_user_profile_admin_py_modeladmin",
       "apps_user_profile_admin_py_register",
-      "apps_user_profile_init",
       "apps_user_profile_models",
       "apps_user_profile_models_patient",
       "apps_user_profile_models_patient_meta",
@@ -55,57 +60,12 @@
       "apps_user_profile_models_profile",
       "apps_user_profile_models_profile_meta",
       "apps_user_profile_models_profile_str",
-      "apps_user_profile_urls",
       "apps_user_profile_views",
       "apps_user_profile_views_profile_view",
       "apps_user_profile_views_py_login_required",
       "django_contrib_auth_decorators"
     ],
     "2": [
-      "apps_home_admin",
-      "apps_login_admin",
-      "apps_register_admin",
-      "apps_user_settings_admin",
-      "apps_user_settings_admin_py_modeladmin",
-      "apps_user_settings_admin_py_register",
-      "apps_user_settings_admin_usersettingsadmin",
-      "apps_user_settings_init",
-      "apps_user_settings_models",
-      "apps_user_settings_models_usersettings",
-      "apps_user_settings_models_usersettings_meta",
-      "apps_user_settings_models_usersettings_str",
-      "apps_user_settings_urls",
-      "apps_user_settings_views",
-      "apps_user_settings_views_py_login_required",
-      "apps_user_settings_views_settings_view",
-      "django_contrib",
-      "django_contrib_auth",
-      "django_contrib_auth_models",
-      "unfold_admin"
-    ],
-    "3": [
-      "apps_home_init",
-      "apps_home_urls",
-      "apps_login_urls",
-      "apps_login_views",
-      "apps_login_views_login_view",
-      "apps_login_views_logout_view",
-      "apps_register_urls",
-      "apps_register_views",
-      "apps_register_views_extendedregistrationform",
-      "apps_register_views_extendedregistrationform_meta",
-      "apps_register_views_register_view",
-      "apps_simulation_init",
-      "apps_simulation_urls",
-      "ascend_core_urls",
-      "django",
-      "django_conf_urls_static",
-      "django_contrib_auth_forms",
-      "django_shortcuts",
-      "django_urls",
-      "usercreationform"
-    ],
-    "4": [
       "apps_home_apps",
       "apps_home_apps_homeconfig",
       "apps_home_apps_py_appconfig",
@@ -125,6 +85,45 @@
       "apps_user_settings_apps_py_appconfig",
       "apps_user_settings_apps_usersettingsconfig",
       "django_apps"
+    ],
+    "3": [
+      "apps_home_admin",
+      "apps_login_admin",
+      "apps_register_admin",
+      "apps_user_settings_admin",
+      "apps_user_settings_admin_py_modeladmin",
+      "apps_user_settings_admin_py_register",
+      "apps_user_settings_admin_usersettingsadmin",
+      "apps_user_settings_models",
+      "apps_user_settings_models_usersettings",
+      "apps_user_settings_models_usersettings_meta",
+      "apps_user_settings_models_usersettings_str",
+      "apps_user_settings_views",
+      "apps_user_settings_views_py_login_required",
+      "apps_user_settings_views_settings_view",
+      "django_contrib",
+      "django_contrib_auth",
+      "django_contrib_auth_models",
+      "unfold_admin"
+    ],
+    "4": [
+      "apps_home_init",
+      "apps_home_urls",
+      "apps_login_urls",
+      "apps_login_views",
+      "apps_login_views_login_view",
+      "apps_login_views_logout_view",
+      "apps_simulation_init",
+      "apps_simulation_urls",
+      "apps_user_profile_init",
+      "apps_user_profile_urls",
+      "apps_user_settings_init",
+      "apps_user_settings_urls",
+      "ascend_core_urls",
+      "django_conf_urls_static",
+      "django_contrib_auth_forms",
+      "django_shortcuts",
+      "django_urls"
     ],
     "5": [
       "ascend_core_asgi",
@@ -174,6 +173,20 @@
       "django_db_models_deletion"
     ],
     "8": [
+      "apps_register_urls",
+      "apps_register_views",
+      "apps_register_views_extendedregistrationform",
+      "apps_register_views_extendedregistrationform_meta",
+      "apps_register_views_register_view",
+      "architectural_decisions",
+      "architecture_report",
+      "django",
+      "project_ascend_documentation",
+      "system_architecture",
+      "usercreationform",
+      "views_and_endpoints"
+    ],
+    "9": [
       "apps_simulation_admin",
       "apps_simulation_admin_ascensionrecordadmin",
       "apps_simulation_admin_fearscenarioadmin",
@@ -185,7 +198,7 @@
       "apps_simulation_models_userdevice_meta",
       "apps_simulation_models_userdevice_str"
     ],
-    "9": [
+    "10": [
       "apps_home_tests",
       "apps_login_tests",
       "apps_register_tests",
@@ -193,14 +206,6 @@
       "apps_user_profile_tests",
       "apps_user_settings_tests",
       "django_test"
-    ],
-    "10": [
-      "apps_simulation_ai_agent_ascendagent",
-      "apps_simulation_ai_agent_ascendagent_actuate_override",
-      "apps_simulation_ai_agent_ascendagent_analyze_frame",
-      "apps_simulation_ai_agent_ascendagent_init",
-      "apps_simulation_ai_agent_ascendagent_perceive",
-      "apps_simulation_ai_agent_rationale_94"
     ],
     "11": [
       "package",
@@ -211,63 +216,70 @@
       "ref_tailwindcss_cli"
     ],
     "12": [
-      "apps_home_migrations_init"
+      "readme",
+      "readme_project_ascenso"
     ],
     "13": [
-      "apps_login_init"
+      "apps_home_migrations_init"
     ],
     "14": [
-      "apps_login_migrations_init"
+      "apps_login_init"
     ],
     "15": [
-      "apps_register_init"
+      "apps_login_migrations_init"
     ],
     "16": [
-      "apps_register_migrations_init"
+      "apps_register_init"
     ],
     "17": [
-      "apps_simulation_migrations_init"
+      "apps_register_migrations_init"
     ],
     "18": [
-      "apps_simulation_scenarios"
+      "apps_simulation_migrations_init"
     ],
     "19": [
-      "apps_user_profile_migrations_init"
+      "apps_simulation_scenarios"
     ],
     "20": [
-      "apps_user_settings_migrations_init"
+      "apps_user_profile_migrations_init"
     ],
     "21": [
-      "ascend_core_init"
+      "apps_user_settings_migrations_init"
     ],
     "22": [
-      "static_js_cv_sensor"
+      "ascend_core_init"
     ],
     "23": [
-      "static_js_live_charts"
+      "static_js_cv_sensor"
     ],
     "24": [
-      "tailwind_config"
+      "static_js_live_charts"
     ],
     "25": [
-      "templates_home_home"
+      "tailwind_config"
     ],
     "26": [
+      "templates_home_home"
+    ],
+    "27": [
       "templates_home_home_chart_data"
+    ],
+    "28": [
+      "templates_simulation_setup"
     ]
   },
   "cohesion": {
-    "0": 0.1053763440860215,
-    "1": 0.11384615384615385,
-    "2": 0.12105263157894737,
-    "3": 0.1368421052631579,
-    "4": 0.10526315789473684,
+    "0": 0.08408408408408409,
+    "1": 0.12681159420289856,
+    "2": 0.10526315789473684,
+    "3": 0.13725490196078433,
+    "4": 0.13970588235294118,
     "5": 0.125,
     "6": 0.15384615384615385,
     "7": 0.22727272727272727,
-    "8": 0.3111111111111111,
-    "9": 0.2857142857142857,
-    "10": 0.3333333333333333,
+    "8": 0.19696969696969696,
+    "9": 0.3111111111111111,
+    "10": 0.2857142857142857,
     "11": 0.3333333333333333,
     "12": 1.0,
     "13": 1.0,
@@ -283,7 +295,9 @@
     "23": 1.0,
     "24": 1.0,
     "25": 1.0,
-    "26": 1.0
+    "26": 1.0,
+    "27": 1.0,
+    "28": 1.0
   },
   "gods": [
     {
@@ -297,13 +311,13 @@
       "degree": 9
     },
     {
-      "id": "apps_user_profile_models_profile",
-      "label": "Profile",
+      "id": "apps_simulation_ai_agent_ascendagent",
+      "label": "AscendAgent",
       "degree": 6
     },
     {
-      "id": "apps_simulation_ai_agent_ascendagent",
-      "label": "AscendAgent",
+      "id": "apps_user_profile_models_profile",
+      "label": "Profile",
       "degree": 6
     },
     {
@@ -332,9 +346,9 @@
       "degree": 6
     },
     {
-      "id": "apps_user_profile_models_patient",
-      "label": "Patient",
-      "degree": 4
+      "id": "project_ascend_documentation",
+      "label": "Project Ascend Documentation",
+      "degree": 5
     }
   ],
   "surprises": [
@@ -397,8 +411,8 @@
   "questions": [
     {
       "type": "bridge_node",
-      "question": "Why does `AscensionRecord` connect `simulation/views.py` to `simulation/admin.py`?",
-      "why": "High betweenness centrality (0.037) - this node is a cross-community bridge."
+      "question": "Why does `AscensionRecord` connect `simulation/views.py` to `django_test`?",
+      "why": "High betweenness centrality (0.035) - this node is a cross-community bridge."
     },
     {
       "type": "verify_inferred",
@@ -408,17 +422,12 @@
     {
       "type": "isolated_nodes",
       "question": "What connects `tailwindcss`, `@tailwindcss/cli`, `Home` to the rest of the system?",
-      "why": "11 weakly-connected nodes found - possible documentation gaps or missing edges."
+      "why": "16 weakly-connected nodes found - possible documentation gaps or missing edges."
     },
     {
       "type": "low_cohesion",
       "question": "Should `simulation/views.py` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.1053763440860215 - nodes in this community are weakly interconnected."
-    },
-    {
-      "type": "bridge_node",
-      "question": "Why does `AscendAgent` connect `AscendAgent` to `simulation/views.py`?",
-      "why": "High betweenness centrality (0.034) - this node is a cross-community bridge."
+      "why": "Cohesion score 0.08408408408408409 - nodes in this community are weakly interconnected."
     },
     {
       "type": "verify_inferred",
@@ -428,7 +437,12 @@
     {
       "type": "low_cohesion",
       "question": "Should `user_profile/admin.py` be split into smaller, more focused modules?",
-      "why": "Cohesion score 0.11384615384615385 - nodes in this community are weakly interconnected."
+      "why": "Cohesion score 0.12681159420289856 - nodes in this community are weakly interconnected."
+    },
+    {
+      "type": "low_cohesion",
+      "question": "Should `django_contrib` be split into smaller, more focused modules?",
+      "why": "Cohesion score 0.10526315789473684 - nodes in this community are weakly interconnected."
     }
   ]
 }

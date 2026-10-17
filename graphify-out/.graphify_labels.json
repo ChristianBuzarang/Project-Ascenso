@@ -2,12 +2,9 @@
   "0": "simulation/views.py",
   "1": "user_profile/admin.py",
   "2": "django_contrib",
-  "3": "register/views.py",
-  "4": "django_apps",
   "5": "os",
   "6": "Base HTML Template",
   "7": "django_db",
-  "8": "simulation/admin.py",
   "9": "django_test",
   "10": "AscendAgent",
   "11": "package.json",
@@ -23,6 +20,9 @@
   "21": "ascend_core/__init__.py",
   "22": "cv_sensor.js",
   "23": "live_charts.js",
+  "24": "live_charts.js",
   "25": "Home",
-  "26": "Chart Data"
+  "26": "Chart Data",
+  "27": "Chart Data",
+  "28": "setup"
 }

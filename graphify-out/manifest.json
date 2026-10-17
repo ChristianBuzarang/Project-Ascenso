@@ -421,14 +421,26 @@
   },
   "README.md": {
     "mtime": 1790655164.8594847,
-    "seen": 1792123428.0022988,
+    "seen": 1792147330.209385,
     "ast_hash": "e2ed4b5c9483990377eabc1a43eda6ec",
-    "semantic_hash": ""
+    "semantic_hash": "e2ed4b5c9483990377eabc1a43eda6ec"
   },
   "templates/simulation/setup.html": {
     "mtime": 1790655164.8621411,
-    "seen": 1792123428.002309,
+    "seen": 1792147603.2636595,
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
+    "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
+  },
+  "docs/index.md": {
+    "mtime": 1792147046.127261,
+    "seen": 1792147330.2093885,
+    "ast_hash": "be15254f69200dfff4e5898b8a3d57b9",
+    "semantic_hash": "be15254f69200dfff4e5898b8a3d57b9"
+  },
+  "docs/code-graph.md": {
+    "mtime": 1792147804.0183287,
+    "seen": 1792147822.8582656,
+    "ast_hash": "459e3d02fbc89e175fd47b95d0f08983",
     "semantic_hash": ""
   }
 }
