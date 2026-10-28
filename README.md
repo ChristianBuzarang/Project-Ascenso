@@ -4,13 +4,13 @@
 
 ---
 
-## 🧠 Overview
+## Overview
 
 **Project Ascenso** is an advanced platform built to help users construct emotional and psychological resilience. By safely simulating controlled stressors across multiple environmental and social domains, the system monitors physiological/behavioral responses and delivers dynamic, real-time AI interventions when stress thresholds are breached.
 
 ---
 
-## 🌟 Key Features
+## Key Features
 
 *   **Four-Domain Stress Simulation:**
     *   *Primal:* Environmental and sensory pressure simulations.
@@ -23,7 +23,7 @@
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## Tech Stack & Architecture
 
 *   **Backend & Database:** Supabase (PostgreSQL, Auth, Edge Functions)
 *   **Core Logic / AI Processing:** Python, Machine Learning pipelines, and AI speech/response models
@@ -31,7 +31,7 @@
 
 ---
 
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
