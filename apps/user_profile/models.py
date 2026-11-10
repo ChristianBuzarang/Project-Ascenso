@@ -14,6 +14,19 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.username
 
+    @property
+    def full_name(self):
+        full = f"{self.user.first_name} {self.user.last_name}".strip()
+        return full if full else self.user.username
+
+    @property
+    def profile_image(self):
+        return self.image
+
+    @profile_image.setter
+    def profile_image(self, value):
+        self.image = value
+
 
 class Patient(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
