@@ -15,16 +15,22 @@
 <div class="settings-wrap hud-panel">
     <div class="settings-header">
         <svg class="settings-icon" viewBox="0 0 24 24" fill="none" stroke="#22d3ee" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-        <h2 class="settings-title">SETTINGS</h2>
+        <div>
+            <h2 class="settings-title">SYSTEM_SETTINGS</h2>
+            <p class="settings-subtitle">NEURAL INTERFACE & CLINICAL PROTOCOL PREFERENCES</p>
+        </div>
     </div>
 
     <form method="POST" class="settings-form">
         {% csrf_token %}
 
+        <!-- SECTION 1: VISUAL & DISPLAY -->
+        <div class="settings-section-title">> INTERFACE & DISPLAY</div>
+
         <label class="setting-row">
             <div class="setting-copy">
                 <h3>Dark Mode</h3>
-                <p>Deep contrast UI for low light.</p>
+                <p>Deep contrast cyberpunk UI for low-light environments.</p>
             </div>
             <div class="toggle">
                 <input type="checkbox" name="dark_mode" class="toggle-input" {% if settings.dark_mode %}checked{% endif %}>
@@ -34,8 +40,82 @@
 
         <label class="setting-row">
             <div class="setting-copy">
-                <h3>Notifications</h3>
-                <p>Receive reports via email.</p>
+                <h3>CRT HUD Scanlines</h3>
+                <p>Render retro-futuristic cathode scanline filter and ambient glow.</p>
+            </div>
+            <div class="toggle">
+                <input type="checkbox" name="crt_scanlines" class="toggle-input" {% if settings.crt_scanlines %}checked{% endif %}>
+                <span class="toggle-track"></span>
+            </div>
+        </label>
+
+        <!-- SECTION 2: AI INTERVENTIONS -->
+        <div class="settings-section-title mt-2">> AI ADAPTIVE INTERVENTIONS</div>
+
+        <label class="setting-row">
+            <div class="setting-copy">
+                <h3>Voice Interventions</h3>
+                <p>Trigger real-time generative speech coach when stress threshold is exceeded.</p>
+            </div>
+            <div class="toggle">
+                <input type="checkbox" name="ai_voice_interventions" class="toggle-input" {% if settings.ai_voice_interventions %}checked{% endif %}>
+                <span class="toggle-track"></span>
+            </div>
+        </label>
+
+        <div class="setting-row select-row">
+            <div class="setting-copy">
+                <h3>Speech Tempo</h3>
+                <p>Rate and pacing for calming voice overrides.</p>
+            </div>
+            <div class="setting-control">
+                <select name="voice_speed" class="settings-dropdown">
+                    <option value="Slow" {% if settings.voice_speed == "Slow" %}selected{% endif %}>Slow (Grounding)</option>
+                    <option value="Normal" {% if settings.voice_speed == "Normal" %}selected{% endif %}>Normal (Standard)</option>
+                    <option value="Rapid" {% if settings.voice_speed == "Rapid" %}selected{% endif %}>Rapid (Emergency)</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 3: BIOMETRIC SENSITIVITY & SAFETY -->
+        <div class="settings-section-title mt-2">> BIOMETRICS & SAFETY PROTOCOLS</div>
+
+        <div class="setting-row select-row">
+            <div class="setting-copy">
+                <h3>Spike Sensitivity</h3>
+                <p>Camera and computer-vision sensitivity to micro-movements and stress spikes.</p>
+            </div>
+            <div class="setting-control">
+                <select name="biometric_sensitivity" class="settings-dropdown">
+                    <option value="Low" {% if settings.biometric_sensitivity == "Low" %}selected{% endif %}>Low (Tolerant)</option>
+                    <option value="Standard" {% if settings.biometric_sensitivity == "Standard" %}selected{% endif %}>Standard (Balanced)</option>
+                    <option value="High" {% if settings.biometric_sensitivity == "High" %}selected{% endif %}>High (Sensitive)</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="setting-row select-row">
+            <div class="setting-copy">
+                <h3>Auto-Abort Safety Timer</h3>
+                <p>Automatic emergency session exit if heart rate stays in panic tier.</p>
+            </div>
+            <div class="setting-control">
+                <select name="auto_abort_timeout" class="settings-dropdown">
+                    <option value="5" {% if settings.auto_abort_timeout == 5 %}selected{% endif %}>5 Seconds</option>
+                    <option value="10" {% if settings.auto_abort_timeout == 10 %}selected{% endif %}>10 Seconds</option>
+                    <option value="15" {% if settings.auto_abort_timeout == 15 %}selected{% endif %}>15 Seconds</option>
+                    <option value="30" {% if settings.auto_abort_timeout == 30 %}selected{% endif %}>30 Seconds</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- SECTION 4: TELEMETRY & COMMS -->
+        <div class="settings-section-title mt-2">> TELEMETRY & COMMS</div>
+
+        <label class="setting-row">
+            <div class="setting-copy">
+                <h3>Email Reports</h3>
+                <p>Receive clinical longitudinal resilience analytics via email.</p>
             </div>
             <div class="toggle">
                 <input type="checkbox" name="email_notifications" class="toggle-input" {% if settings.email_notifications %}checked{% endif %}>
@@ -43,7 +123,21 @@
             </div>
         </label>
 
-        <button type="submit" class="hud-btn-chunky">SAVE PREFERENCES</button>
+        <label class="setting-row">
+            <div class="setting-copy">
+                <h3>Consortium Research Telemetry</h3>
+                <p>Stream anonymized session records to improve AI cognitive models.</p>
+            </div>
+            <div class="toggle">
+                <input type="checkbox" name="telemetry_sharing" class="toggle-input" {% if settings.telemetry_sharing %}checked{% endif %}>
+                <span class="toggle-track"></span>
+            </div>
+        </label>
+
+        <div class="button-row mt-4">
+            <button type="submit" class="hud-btn-chunky flex-1">SAVE PREFERENCES</button>
+            <button type="submit" name="action" value="reset" class="hud-btn-secondary" onclick="return confirm('Restore all system settings to default protocols?');">RESET DEFAULTS</button>
+        </div>
     </form>
 </div>
 
@@ -58,60 +152,98 @@
 </script>
 
 <style>
-    /* Plain CSS for structure — doesn't depend on the Tailwind build having
-       scanned these exact classes (this is what caused the giant unstyled
-       gear icon: w-10/h-10 wasn't in the compiled tailwind.css). */
-
+    /* Plain CSS for structure — doesn't depend on the Tailwind build */
     .settings-wrap {
-        max-width: 420px;
+        max-width: 580px;
         width: 100%;
         margin: 2.5rem auto;
         border-radius: 24px;
-        padding: 1.75rem;
+        padding: 2rem;
     }
     .settings-header {
         display: flex;
         align-items: center;
-        gap: 0.75rem;
+        gap: 1rem;
         margin-bottom: 1.5rem;
         padding-bottom: 1.1rem;
         border-bottom: 1px solid rgba(51, 65, 85, 0.5);
     }
-    .settings-icon { width: 26px; height: 26px; flex-shrink: 0; }
-    .settings-title { font-size: 1.35rem; font-weight: 800; letter-spacing: 0.1em; color: #fff; }
+    .settings-icon { width: 32px; height: 32px; flex-shrink: 0; }
+    .settings-title { font-size: 1.45rem; font-weight: 800; letter-spacing: 0.12em; color: #fff; margin: 0; line-height: 1.2; }
+    .settings-subtitle { font-size: 0.75rem; color: #00f0ff; letter-spacing: 0.1em; margin-top: 0.2rem; font-family: 'Share Tech Mono', monospace; }
 
-    .settings-form { display: flex; flex-direction: column; gap: 0.75rem; font-family: 'Share Tech Mono', monospace; }
+    .settings-section-title {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: #00f0ff;
+        letter-spacing: 0.15em;
+        margin: 0.75rem 0 0.4rem 0.25rem;
+        text-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+    }
+
+    .settings-form { display: flex; flex-direction: column; gap: 0.85rem; font-family: 'Share Tech Mono', monospace; }
 
     .setting-row {
         display: flex; align-items: center; justify-content: space-between; gap: 1rem;
-        background: rgba(0,0,0,0.3); padding: 0.9rem 1.1rem; border-radius: 16px;
-        border: 1px solid #334155; cursor: pointer; transition: border-color 0.2s ease;
+        background: rgba(0, 15, 30, 0.5); padding: 1rem 1.25rem; border-radius: 16px;
+        border: 1px solid #334155; cursor: pointer; transition: border-color 0.2s ease, background 0.2s ease;
     }
-    .setting-row:hover { border-color: rgba(34, 211, 238, 0.5); }
+    .setting-row:hover { border-color: rgba(34, 211, 238, 0.5); background: rgba(0, 25, 45, 0.6); }
     .setting-copy h3 { font-size: 1.05rem; color: #22d3ee; font-weight: 700; margin-bottom: 0.15rem; }
-    .setting-copy p { font-size: 0.82rem; color: #94a3b8; }
+    .setting-copy p { font-size: 0.82rem; color: #94a3b8; line-height: 1.35; }
 
-    /* Smaller toggle switch than before */
-    .toggle { position: relative; flex-shrink: 0; width: 42px; height: 24px; }
+    /* Dropdown inside settings */
+    .setting-control { flex-shrink: 0; }
+    .settings-dropdown {
+        background: #041424 !important;
+        border: 1px solid rgba(0, 240, 255, 0.4) !important;
+        color: #00f0ff !important;
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 14px !important;
+        padding: 10px 14px !important;
+        border-radius: 10px !important;
+        outline: none !important;
+        cursor: pointer !important;
+        transition: all 0.2s ease !important;
+    }
+    .settings-dropdown:hover, .settings-dropdown:focus {
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 12px rgba(0, 240, 255, 0.3) !important;
+    }
+    .settings-dropdown option {
+        background-color: #041424 !important;
+        color: #00f0ff !important;
+    }
+
+    /* Smaller toggle switch */
+    .toggle { position: relative; flex-shrink: 0; width: 44px; height: 26px; }
     .toggle-input { position: absolute; opacity: 0; width: 100%; height: 100%; margin: 0; cursor: pointer; z-index: 1; }
     .toggle-track {
         position: absolute; inset: 0; background: #334155; border-radius: 9999px; transition: background 0.2s ease;
     }
     .toggle-track::after {
-        content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px;
+        content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px;
         background: #fff; border-radius: 9999px; transition: transform 0.2s ease;
     }
-    .toggle-input:checked + .toggle-track { background: #22d3ee; }
+    .toggle-input:checked + .toggle-track { background: #22d3ee; box-shadow: 0 0 10px rgba(34, 211, 238, 0.5); }
     .toggle-input:checked + .toggle-track::after { transform: translateX(18px); }
 
+    .button-row { display: flex; gap: 1rem; align-items: center; }
+
     .hud-btn-chunky {
-        margin-top: 0.5rem;
-        width: 100%; padding: 15px 0; background: #00c2d1; color: #04141a; font-weight: 800;
-        letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 16px;
-        font-size: 1rem; border-bottom: 4px solid #007c86; cursor: pointer; transition: all 0.1s ease;
+        padding: 14px 20px; background: #00c2d1; color: #04141a; font-weight: 800;
+        letter-spacing: 2px; text-transform: uppercase; border: none; border-radius: 14px;
+        font-size: 0.95rem; border-bottom: 4px solid #007c86; cursor: pointer; transition: all 0.15s ease;
     }
-    .hud-btn-chunky:hover { background: #1fd6e6; }
+    .hud-btn-chunky:hover { background: #1fd6e6; box-shadow: 0 0 15px rgba(0, 194, 209, 0.4); }
     .hud-btn-chunky:active { border-bottom-width: 0px; transform: translateY(4px); }
+
+    .hud-btn-secondary {
+        padding: 14px 20px; background: rgba(30, 41, 59, 0.7); color: #94a3b8; font-weight: 700;
+        letter-spacing: 1.5px; text-transform: uppercase; border: 1px solid #475569; border-radius: 14px;
+        font-size: 0.85rem; cursor: pointer; transition: all 0.15s ease;
+    }
+    .hud-btn-secondary:hover { background: rgba(239, 68, 68, 0.2); border-color: #ef4444; color: #ff8080; }
 
     .slide-in-toast { animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     @keyframes slideIn { from { opacity: 0; transform: translateX(100%); } to { opacity: 1; transform: translateX(0); } }
