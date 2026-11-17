@@ -8,7 +8,7 @@
         <div>
             <!-- Neural Link Status: -->
             <p class="font-mono-tech text-cyan-400 text-lg tracking-widest mb-2">> NEURAL_LINK_ESTABLISHED</p>
-            <h2 class="text-5xl font-black text-white mb-2 tracking-tight uppercase">OPERATOR: {{ user.username }}</h2>
+            <h2 class="text-5xl font-black text-white mb-2 tracking-tight uppercase">OPERATOR: {% if user.first_name and user.last_name %}{{ user.first_name }} {{ user.last_name }}{% elif user.first_name %}{{ user.first_name }}{% else %}{{ user.username }}{% endif %}</h2>
         </div>
         <div class="text-right font-mono-tech">
             <!-- System Time: -->
@@ -32,10 +32,10 @@
                 <div class="group">
                     <label class="block text-[15px] font-bold text-cyan-400 tracking-[0.1em] mb-2">> TARGET_CATEGORY</label>
                     <div class="relative">
-                        <select id="category-select" class="w-full appearance-none bg-slate-900/80 border border-slate-700 text-slate-200 text-sm px-4 py-4 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer">
+                        <select id="category-select" class="hud-select">
                             <!-- Populated by JavaScript -->
                         </select>
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500">▼</div>
+                        <div class="select-arrow text-cyan-400">▼</div>
                     </div>
                 </div>
 
@@ -43,10 +43,10 @@
                 <div class="group">
                     <label class="block text-[15px] font-bold text-cyan-400 tracking-[0.1em] mb-2">> SPECIFIC_PROTOCOL</label>
                     <div class="relative">
-                        <select id="scenario-select" name="scenario" class="w-full appearance-none bg-slate-900/80 border border-slate-700 text-slate-200 text-sm px-4 py-4 rounded-xl outline-none focus:border-cyan-500 focus:ring-1 focus:ring-cyan-500 transition-all cursor-pointer">
+                        <select id="scenario-select" name="scenario" class="hud-select">
                             <!-- Populated by JavaScript based on Category -->
                         </select>
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-cyan-500">▼</div>
+                        <div class="select-arrow text-cyan-400">▼</div>
                     </div>
                 </div>
 
@@ -54,12 +54,12 @@
                 <div class="group">
                     <label class="block text-[15px] font-bold text-red-400 tracking-[0.1em] mb-2">> OVERRIDE_THRESHOLD</label>
                     <div class="relative">
-                        <select name="level" class="w-full appearance-none bg-slate-900/80 border border-red-500/50 text-white text-sm px-4 py-4 rounded-xl outline-none focus:border-red-500 focus:ring-1 focus:ring-red-500 transition-all cursor-pointer">
+                        <select name="level" class="hud-select hud-select-red">
                             {% for key, name in levels.items %}
                                 <option value="{{ key }}">{{ name }}</option>
                             {% endfor %}
                         </select>
-                        <div class="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-red-500">▼</div>
+                        <div class="select-arrow text-red-400">▼</div>
                     </div>
                 </div>
 
@@ -211,5 +211,88 @@
     .animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
     @keyframes fadeIn { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: blur(0); } }
     @keyframes scan { 0% { top: -10px; } 100% { top: 100%; } }
+
+    /* Protocol Config Cyberpunk Select Dropdown Styling */
+    .hud-select {
+        width: 100% !important;
+        background-color: rgba(4, 18, 32, 0.95) !important;
+        border: 1px solid rgba(0, 240, 255, 0.45) !important;
+        color: #e2f8ff !important;
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 15px !important;
+        letter-spacing: 0.05em !important;
+        padding: 14px 44px 14px 18px !important; /* Generous internal padding - not close to edge */
+        border-radius: 12px !important;
+        outline: none !important;
+        cursor: pointer !important;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.08) inset, 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+        transition: border-color 0.25s ease, box-shadow 0.25s ease, color 0.25s ease !important;
+        appearance: none !important;
+        -webkit-appearance: none !important;
+        -moz-appearance: none !important;
+    }
+    .hud-select:hover {
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 20px rgba(0, 240, 255, 0.25) inset, 0 0 12px rgba(0, 240, 255, 0.3) !important;
+        color: #ffffff !important;
+    }
+    .hud-select:focus {
+        border-color: #00f0ff !important;
+        box-shadow: 0 0 25px rgba(0, 240, 255, 0.35) inset, 0 0 15px rgba(0, 240, 255, 0.4) !important;
+        color: #ffffff !important;
+    }
+    /* Options styling inside the dropdown */
+    .hud-select option {
+        background-color: #041424 !important;
+        color: #00f0ff !important;
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 15px !important;
+        padding: 12px 18px !important;
+    }
+    .hud-select option:checked,
+    .hud-select option:hover {
+        background-color: #0c3356 !important;
+        color: #ffffff !important;
+    }
+
+    /* Red Variant for OVERRIDE_THRESHOLD */
+    .hud-select-red {
+        background-color: rgba(28, 8, 14, 0.95) !important;
+        border: 1px solid rgba(255, 0, 60, 0.5) !important;
+        color: #ffd0d8 !important;
+        box-shadow: 0 0 15px rgba(255, 0, 60, 0.1) inset, 0 2px 8px rgba(0, 0, 0, 0.6) !important;
+    }
+    .hud-select-red:hover {
+        border-color: #ff003c !important;
+        box-shadow: 0 0 20px rgba(255, 0, 60, 0.25) inset, 0 0 12px rgba(255, 0, 60, 0.3) !important;
+        color: #ffffff !important;
+    }
+    .hud-select-red:focus {
+        border-color: #ff003c !important;
+        box-shadow: 0 0 25px rgba(255, 0, 60, 0.35) inset, 0 0 15px rgba(255, 0, 60, 0.4) !important;
+        color: #ffffff !important;
+    }
+    .hud-select-red option {
+        background-color: #1a050b !important;
+        color: #ff4d6d !important;
+        font-family: 'Share Tech Mono', monospace !important;
+        font-size: 15px !important;
+        padding: 12px 18px !important;
+    }
+    .hud-select-red option:checked,
+    .hud-select-red option:hover {
+        background-color: #420d1c !important;
+        color: #ffffff !important;
+    }
+
+    .select-arrow {
+        position: absolute;
+        right: 18px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        font-size: 12px;
+        transition: transform 0.2s ease;
+    }
 </style>
 {% endblock %}
