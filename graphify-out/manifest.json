@@ -432,15 +432,27 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "docs/index.md": {
-    "mtime": 1792147046.127261,
-    "seen": 1792147330.2093885,
-    "ast_hash": "be15254f69200dfff4e5898b8a3d57b9",
-    "semantic_hash": "be15254f69200dfff4e5898b8a3d57b9"
+    "mtime": 1792205050.4390032,
+    "seen": 1792205481.6195405,
+    "ast_hash": "9d4d90081ded894478bdfc6448733207",
+    "semantic_hash": ""
   },
   "docs/code-graph.md": {
-    "mtime": 1792147804.0183287,
-    "seen": 1792147822.8582656,
-    "ast_hash": "459e3d02fbc89e175fd47b95d0f08983",
+    "mtime": 1792205776.8709292,
+    "seen": 1792205776.882691,
+    "ast_hash": "7983e6c8c5da0e9322b538d07db709bb",
+    "semantic_hash": ""
+  },
+  "docs/decisions/0001-ascension-simulation-coupling.md": {
+    "mtime": 1792205370.434916,
+    "seen": 1792205481.6195378,
+    "ast_hash": "09040c740f609a395a2d83e257514f01",
+    "semantic_hash": ""
+  },
+  "docs/decisions/template.md": {
+    "mtime": 1792204302.83322,
+    "seen": 1792205481.6195395,
+    "ast_hash": "170af4e142228a0d41e4015d91612540",
     "semantic_hash": ""
   }
 }
