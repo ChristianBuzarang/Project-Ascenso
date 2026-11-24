@@ -3,7 +3,6 @@
   "2": "django_contrib",
   "5": "os",
   "6": "Base HTML Template",
-  "7": "django_db",
   "10": "AscendAgent",
   "11": "package.json",
   "12": "home/migrations/__init__.py",
