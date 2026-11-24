@@ -10,8 +10,7 @@ from apps.user_settings.models import UserSettings
 class ExtendedRegistrationForm(UserCreationForm):
     ROLE_CHOICES = [
         ("Patient", "Patient"),
-        ("Doctor", "Doctor"),
-        ("Therapist", "Therapist"),
+        ("Professional", "Professional (Doctor, Psychiatrist, Therapist, etc.)"),
     ]
 
     first_name = forms.CharField(
@@ -27,7 +26,23 @@ class ExtendedRegistrationForm(UserCreationForm):
         choices=ROLE_CHOICES,
         initial="Patient",
         required=True,
-        label="Designation (Role)",
+        label="Role",
+    )
+    specialty = forms.CharField(
+        max_length=100,
+        required=False,
+        label="Clinical Specialty (For Professionals)",
+        widget=forms.TextInput(
+            attrs={"placeholder": "e.g. Doctor, Psychiatrist, Clinical Psychologist, Therapist"}
+        ),
+    )
+    license_number = forms.CharField(
+        max_length=100,
+        required=False,
+        label="License Number (For Professionals)",
+        widget=forms.TextInput(
+            attrs={"placeholder": "e.g. MD-12345 or LIC-8800"}
+        ),
     )
 
     field_order = [
@@ -36,6 +51,8 @@ class ExtendedRegistrationForm(UserCreationForm):
         "first_name",
         "last_name",
         "designation",
+        "specialty",
+        "license_number",
         "password1",
         "password2",
     ]
@@ -52,26 +69,32 @@ def register_view(request):
     if request.method == "POST":
         form = ExtendedRegistrationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
             role = form.cleaned_data.get("designation", "Patient")
+            user.role = role
+            user.save()
+            form.save_m2m()
 
-            # Initialize User Profile with chosen role & designation in Supabase
-            profile, created = Profile.objects.get_or_create(user=user)
-            profile.role = role
-            profile.designation = role
-            profile.save()
+            specialty_input = form.cleaned_data.get("specialty", "").strip()
+            license_input = form.cleaned_data.get("license_number", "").strip()
+
+            # Initialize User Profile in Supabase
+            Profile.objects.get_or_create(user=user)
 
             # Initialize specific role table in Supabase
             if role == "Patient":
                 Patient.objects.get_or_create(user=user)
-            elif role in ("Doctor", "Therapist"):
+            elif role == "Professional":
+                specialty = specialty_input if specialty_input else "Doctor / Psychiatrist"
+                license_no = license_input if license_input else f"PRO-{user.id:04d}"
                 Professional.objects.get_or_create(
                     user=user,
                     defaults={
-                        "specialty": role,
-                        "license_number": f"{role[:3].upper()}-{user.id:04d}",
+                        "specialty": specialty,
+                        "license_number": license_no,
                     },
                 )
+
 
             # Initialize User Settings
             UserSettings.objects.get_or_create(user=user)
