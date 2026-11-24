@@ -4,8 +4,10 @@
   "4": "AscensionRecord",
   "7": "django_db",
   "8": "[ADR-XXXX] Title: Short Sentence Describing the Decision",
-  "9": "django_urls",
-  "29": "Project Ascend Documentation",
+  "9": "ModelAdmin",
+  "29": "login/views.py",
   "30": "Communities (30 total, 20 thin omitted)",
-  "31": "simulation/admin.py"
+  "31": "simulation/admin.py",
+  "32": "register",
+  "33": "login_required"
 }

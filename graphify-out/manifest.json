@@ -150,10 +150,10 @@
     "semantic_hash": "d41d8cd98f00b204e9800998ecf8427e"
   },
   "apps/simulation/admin.py": {
-    "mtime": 1791351325.1859338,
-    "seen": 1792120707.3801935,
-    "ast_hash": "ba37277d0ca3fb0852979aa81eced99a",
-    "semantic_hash": "ba37277d0ca3fb0852979aa81eced99a"
+    "mtime": 1795489222.5932546,
+    "seen": 1795492173.8024666,
+    "ast_hash": "bd8a51a8f6d4000d93ee2bba2f686e33",
+    "semantic_hash": ""
   },
   "apps/simulation/ai_agent.py": {
     "mtime": 1795478662.0640328,
@@ -198,16 +198,16 @@
     "semantic_hash": "465b7e9f69bfd158c850cdfbc7306818"
   },
   "apps/simulation/urls.py": {
-    "mtime": 1790655164.8605952,
-    "seen": 1792120707.3802018,
-    "ast_hash": "e29160f9a27b30bdba8f1cac2e929ce9",
-    "semantic_hash": "e29160f9a27b30bdba8f1cac2e929ce9"
+    "mtime": 1795481594.2029502,
+    "seen": 1795492173.8024793,
+    "ast_hash": "970baaa35993a14fd4dc8329c17dcebf",
+    "semantic_hash": ""
   },
   "apps/simulation/views.py": {
-    "mtime": 1790669674.7737494,
-    "seen": 1792120707.3802028,
-    "ast_hash": "12964ba658a2c33c1fad8ac2ccf11939",
-    "semantic_hash": "12964ba658a2c33c1fad8ac2ccf11939"
+    "mtime": 1795481249.95694,
+    "seen": 1795492173.8024807,
+    "ast_hash": "bc19bbe3d2c38963c9bd54a04d5cdbdf",
+    "semantic_hash": ""
   },
   "apps/user_profile/__init__.py": {
     "mtime": 1790655164.8605952,
@@ -330,8 +330,8 @@
     "semantic_hash": "2103da26fb61028741fa3d576fb798a3"
   },
   "ascend_core/settings.py": {
-    "mtime": 1795478485.5967758,
-    "seen": 1795478877.3763294,
+    "mtime": 1795484083.6185102,
+    "seen": 1795492173.8025155,
     "ast_hash": "2df8005155730335eb700edbf32af1ba",
     "semantic_hash": ""
   },
@@ -438,9 +438,9 @@
     "semantic_hash": ""
   },
   "docs/code-graph.md": {
-    "mtime": 1795478877.3644419,
-    "seen": 1795478877.3763387,
-    "ast_hash": "248ab6a8a4b6ef4979a45b95ac77550f",
+    "mtime": 1795492173.7896605,
+    "seen": 1795492173.8025339,
+    "ast_hash": "ec477d6903e5cdbee2ffb894be7439f1",
     "semantic_hash": ""
   },
   "docs/decisions/0001-ascension-simulation-coupling.md": {
@@ -483,6 +483,12 @@
     "mtime": 1795478662.0650327,
     "seen": 1795478877.376322,
     "ast_hash": "c2ba3f7ce72f71b16c510032467d7ce3",
+    "semantic_hash": ""
+  },
+  "templates/admin_orm_queries.html": {
+    "mtime": 1795490497.4770644,
+    "seen": 1795492173.8025408,
+    "ast_hash": "2af37ed0c1c476acd4c187179c62a5dc",
     "semantic_hash": ""
   }
 }
