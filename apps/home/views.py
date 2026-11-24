@@ -3,6 +3,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from apps.simulation.models import AscensionRecord, FearScenario
+from apps.user_profile.models import Patient, Professional, ProfessionalAssignment
+
 
 
 FEAR_LEVELS = {
@@ -18,7 +20,7 @@ FEAR_LEVELS = {
 
 @login_required(login_url="login:login")
 def home_view(request):
-    """Loads the Dashboard HTML"""
+    """Loads the Dashboard HTML with longitudinal records and active professional connectivity"""
     records = AscensionRecord.objects.filter(user=request.user)
 
     scenarios = FearScenario.objects.filter(is_active=True).order_by("category", "name")
@@ -29,12 +31,29 @@ def home_view(request):
             categorized_scenarios[s.category] = []
         categorized_scenarios[s.category].append({"id": s.id, "name": s.name})
 
+    # Surface professional assignments based on user role (from auth_user table)
+    assigned_professionals = []
+    assigned_patients = []
+
+    if request.user.is_patient:
+        assigned_professionals = ProfessionalAssignment.objects.filter(
+            patient__user=request.user, status="Active"
+        ).select_related("professional__user", "professional__user__profile")
+    elif request.user.is_professional:
+        assigned_patients = ProfessionalAssignment.objects.filter(
+            professional__user=request.user, status="Active"
+        ).select_related("patient__user", "patient__user__profile")
+
+
     context = {
         "categories_json": json.dumps(categorized_scenarios),
         "levels": FEAR_LEVELS,
         "has_history": len(records) > 0,
+        "assigned_professionals": assigned_professionals,
+        "assigned_patients": assigned_patients,
     }
     return render(request, "home/home.html", context)
+
 
 
 @login_required(login_url="login:login")
