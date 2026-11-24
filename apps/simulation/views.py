@@ -7,6 +7,9 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.models import User
+from django.db.models import Subquery
 from .ai_agent import AscendAgent
 from .models import AscensionRecord, FearScenario
 
@@ -110,3 +113,40 @@ def end_session_api(request):
 
         return JsonResponse({"status": "success"})
     return JsonResponse({"status": "failed"}, status=400)
+
+
+@staff_member_required
+def admin_orm_queries_view(request):
+    min_hr_raw = request.GET.get("min_hr", "").strip()
+
+    # 1. SQL JOIN via Django ORM
+    join_queryset = AscensionRecord.objects.select_related("user", "scenario").order_by(
+        "-timestamp"
+    )
+    join_sql = str(join_queryset.query)
+
+    # 2. SQL SUBQUERY via Django ORM
+    inner_records = AscensionRecord.objects.exclude(user__isnull=True)
+    if min_hr_raw:
+        try:
+            min_hr = float(min_hr_raw)
+            inner_records = inner_records.filter(peak_hr__gte=min_hr)
+        except ValueError:
+            pass
+
+    subquery_user_ids = inner_records.values("user_id")
+    subquery_queryset = User.objects.filter(
+        id__in=Subquery(subquery_user_ids)
+    ).order_by("username")
+    subquery_sql = str(subquery_queryset.query)
+
+    context = {
+        "title": "Django ORM JOIN & SUBQUERY Explorer",
+        "join_records": join_queryset,
+        "join_sql": join_sql,
+        "subquery_users": subquery_queryset,
+        "subquery_sql": subquery_sql,
+        "min_hr": min_hr_raw,
+        "scenario_count": FearScenario.objects.count(),
+    }
+    return render(request, "admin_orm_queries.html", context)
