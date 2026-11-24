@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+<div class="fixed top-20 right-6 z-50 flex flex-col gap-2">
+    {% for message in messages %}
+    <div class="hud-panel px-6 py-4 border-l-4 {% if message.tags == 'error' %}border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]{% elif message.tags == 'info' %}border-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.2)]{% else %}border-green-400 shadow-[0_0_20px_rgba(74,222,128,0.3)]{% endif %} flex items-center gap-3 slide-in-toast backdrop-blur-md">
+        {% if message.tags == 'error' %}
+            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        {% elif message.tags == 'info' %}
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {% else %}
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {% endif %}
+        <span class="text-white font-mono-tech tracking-wider text-base">{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="w-full max-w-6xl flex flex-col gap-8 animate-fade-in py-4">
+
+    <!-- Header Panel -->
+    <div class="hud-panel p-8 bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-transparent border-l-4 border-l-cyan-400 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <p class="font-mono-tech text-cyan-400 text-sm tracking-[0.25em] mb-2">> NEURAL_LINK // PROFESSIONAL_CONNECTION_PORTAL</p>
+            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight uppercase">
+                CLINICAL SPECIALIST <span class="text-cyan-400">NETWORK</span>
+            </h1>
+            <p class="font-mono-tech text-slate-400 text-sm mt-2 tracking-wide">
+                Assign and synchronize your ASCEND_OS cognitive resilience telemetry with licensed professionals.
+            </p>
+        </div>
+        <div class="font-mono-tech text-right self-stretch md:self-auto border-t md:border-t-0 pt-3 md:pt-0 border-cyan-500/20">
+            <span class="text-xs text-slate-400 tracking-widest uppercase block">PATIENT_IDENTIFIER</span>
+            <span class="text-cyan-400 text-2xl font-bold tracking-wider drop-shadow-[0_0_8px_cyan]">{{ user.username|upper }}</span>
+            <span class="block text-xs text-slate-500 mt-1">STATUS: {% if active_professional_ids %}SUPERVISED{% else %}UNSUPERVISED{% endif %}</span>
+        </div>
+    </div>
+
+    <!-- Quick Connect Selector Bar -->
+    {% if available_professionals %}
+    <div class="hud-panel p-6 bg-slate-900/40">
+        <h2 class="text-xl font-bold text-white mb-4 tracking-wider uppercase font-mono-tech flex items-center gap-2">
+            <span class="text-cyan-400">■</span> QUICK_CONNECT SELECTOR
+        </h2>
+        <form method="POST" action="{% url 'user_profile:connect' %}" class="flex flex-col sm:flex-row gap-4 items-stretch sm:items-center">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="connect">
+            <div class="flex-grow relative font-mono-tech">
+                <select name="professional_id" required class="hud-connect-select w-full">
+                    <option value="" disabled selected>-- Select a verified Doctor or Therapist --</option>
+                    {% for prof in available_professionals %}
+                        <option value="{{ prof.id }}" {% if prof.id in active_professional_ids %}disabled{% endif %}>
+                            {{ prof }} — {{ prof.specialty|default:"Specialist" }} ({{ prof.license_number|default:"LIC-PENDING" }})
+                            {% if prof.id in active_professional_ids %} [ALREADY CONNECTED]{% endif %}
+                        </option>
+                    {% endfor %}
+                </select>
+                <div class="connect-select-arrow">▼</div>
+            </div>
+            <button type="submit" class="hud-btn px-8 py-3.5 text-base font-bold font-mono-tech whitespace-nowrap">
+                ESTABLISH LINK
+            </button>
+        </form>
+    </div>
+    {% endif %}
+
+    <!-- Available Professionals Grid -->
+    <div>
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-2xl font-bold text-white tracking-widest uppercase font-mono-tech flex items-center gap-2">
+                <span class="text-cyan-400">■</span> VERIFIED SPECIALISTS ({{ available_professionals|length }})
+            </h2>
+            <span class="font-mono-tech text-xs text-slate-400 tracking-widest">NETWORK_ROSTER_V2.1</span>
+        </div>
+
+        {% if available_professionals %}
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for prof in available_professionals %}
+            <div class="hud-panel p-6 flex flex-col justify-between transition-all duration-300 hover:border-cyan-400/70 {% if prof.id in active_professional_ids %}border-cyan-400 shadow-[0_0_15px_rgba(0,240,255,0.15)]{% endif %}">
+                <div>
+                    <!-- Top Status Badge -->
+                    <div class="flex justify-between items-start mb-4">
+                        <span class="text-xs px-2.5 py-1 rounded font-mono-tech font-bold uppercase tracking-wider {% if prof.user.profile.is_doctor %}bg-blue-950 text-blue-300 border border-blue-500/40{% else %}bg-teal-950 text-teal-300 border border-teal-500/40{% endif %}">
+                            {{ prof.specialty|default:prof.user.profile.designation|default:"Specialist" }}
+                        </span>
+                        {% if prof.id in active_professional_ids %}
+                            <span class="text-xs px-2.5 py-1 rounded font-mono-tech font-bold text-green-400 bg-green-950/60 border border-green-500/40 flex items-center gap-1.5 animate-pulse">
+                                <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span> ACTIVE LINK
+                            </span>
+                        {% else %}
+                            <span class="text-xs px-2 py-0.5 rounded font-mono-tech text-slate-400 border border-slate-700">
+                                AVAILABLE
+                            </span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Specialist Info -->
+                    <div class="flex items-center gap-4 mb-4">
+                        <div class="w-14 h-14 rounded-full border-2 {% if prof.id in active_professional_ids %}border-cyan-400 shadow-[0_0_10px_cyan]{% else %}border-slate-700{% endif %} bg-slate-900 flex items-center justify-center overflow-hidden shrink-0">
+                            {% if prof.user.profile.image %}
+                                <img src="{{ prof.user.profile.image.url }}" alt="{{ prof.user.username }}" class="w-full h-full object-fit-cover">
+                            {% else %}
+                                <span class="text-cyan-400 font-bold font-mono-tech text-xl">
+                                    {% if prof.user.first_name %}{{ prof.user.first_name|make_list|first|upper }}{% else %}{{ prof.user.username|make_list|first|upper }}{% endif %}
+                                </span>
+                            {% endif %}
+                        </div>
+                        <div>
+                            <h3 class="text-xl font-bold text-white tracking-wide">
+                                {% if prof.user.first_name or prof.user.last_name %}
+                                    {{ prof.user.first_name }} {{ prof.user.last_name }}
+                                {% else %}
+                                    {{ prof.user.username }}
+                                {% endif %}
+                            </h3>
+                            <p class="font-mono-tech text-xs text-slate-400 mt-0.5">
+                                LIC: <span class="text-cyan-300">{{ prof.license_number|default:"PENDING" }}</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Bio Snippet -->
+                    {% if prof.user.profile.bio %}
+                    <p class="text-sm text-slate-300 font-mono-tech line-clamp-2 mb-6 bg-slate-950/40 p-3 rounded border border-slate-800">
+                        "{{ prof.user.profile.bio }}"
+                    </p>
+                    {% else %}
+                    <p class="text-sm text-slate-500 font-mono-tech italic mb-6">
+                        No clinical bio registered.
+                    </p>
+                    {% endif %}
+                </div>
+
+                <!-- Action Button -->
+                <div class="pt-4 border-t border-cyan-500/20 font-mono-tech">
+                    {% if prof.id in active_professional_ids %}
+                        <!-- Active: Allow disconnect -->
+                        <div class="flex gap-2">
+                            <span class="flex-grow py-2 text-center text-xs font-bold text-cyan-400 bg-cyan-950/40 border border-cyan-500/40 rounded tracking-wider">
+                                CONNECTION ACTIVE
+                            </span>
+                            {% for link in existing_assignments %}
+                                {% if link.professional_id == prof.id and link.status == 'Active' %}
+                                <form method="POST" action="{% url 'user_profile:connect' %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="disconnect">
+                                    <input type="hidden" name="assignment_id" value="{{ link.id }}">
+                                    <button type="submit" class="px-3 py-2 text-xs font-bold text-red-400 hover:text-white hover:bg-red-900/60 border border-red-500/40 rounded transition-colors" title="Disconnect this link">
+                                        DISCONNECT
+                                    </button>
+                                </form>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        <!-- Not connected: Form to Connect -->
+                        <form method="POST" action="{% url 'user_profile:connect' %}">
+                            {% csrf_token %}
+                            <input type="hidden" name="action" value="connect">
+                            <input type="hidden" name="professional_id" value="{{ prof.id }}">
+                            <button type="submit" class="hud-btn w-full py-2.5 text-sm font-bold tracking-widest">
+                                [ CONNECT ]
+                            </button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="hud-panel p-12 text-center font-mono-tech">
+            <svg class="w-16 h-16 text-slate-600 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
+            <p class="text-2xl text-slate-400 font-bold mb-2 tracking-widest uppercase">NO REGISTERED PROFESSIONALS FOUND</p>
+            <p class="text-slate-500 text-sm max-w-md mx-auto">
+                No Doctor or Therapist accounts are currently available in the network directory. You can assign or create professional profiles in the System Admin.
+            </p>
+            {% if user.is_superuser %}
+            <a href="/admin/user_profile/professional/add/" target="_blank" class="hud-btn inline-block mt-6 px-6 py-3 text-sm font-bold">
+                CREATE PROFESSIONAL IN ADMIN
+            </a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Active & Historical Connection Assignments Table -->
+    <div class="hud-panel p-8 bg-slate-900/30">
+        <div class="flex justify-between items-center mb-6 border-b border-cyan-500/30 pb-4">
+            <h2 class="text-2xl font-bold text-white tracking-widest uppercase font-mono-tech flex items-center gap-2">
+                <span class="text-cyan-400">■</span> CONNECTION ASSIGNMENT LOG
+            </h2>
+            <span class="font-mono-tech text-xs text-slate-400 tracking-widest">SUPABASE_TABLE: professional_assignment</span>
+        </div>
+
+        {% if existing_assignments %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left font-mono-tech border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-700 text-cyan-400 text-xs tracking-[0.2em] uppercase">
+                        <th class="py-3 px-4">SPECIALIST</th>
+                        <th class="py-3 px-4">SPECIALTY</th>
+                        <th class="py-3 px-4">LICENSE #</th>
+                        <th class="py-3 px-4">ASSIGNED DATE</th>
+                        <th class="py-3 px-4">STATUS</th>
+                        <th class="py-3 px-4 text-right">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-sm">
+                    {% for item in existing_assignments %}
+                    <tr class="hover:bg-cyan-950/20 transition-colors">
+                        <td class="py-4 px-4 font-bold text-white tracking-wide">
+                            {{ item.professional }}
+                        </td>
+                        <td class="py-4 px-4 text-slate-300">
+                            {{ item.professional.specialty|default:item.professional.user.profile.designation|default:"Specialist" }}
+                        </td>
+                        <td class="py-4 px-4 text-slate-400">
+                            {{ item.professional.license_number|default:"—" }}
+                        </td>
+                        <td class="py-4 px-4 text-slate-400">
+                            {{ item.assigned_date|date:"Y-m-d H:i" }}
+                        </td>
+                        <td class="py-4 px-4">
+                            {% if item.status == "Active" %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-green-950 text-green-300 border border-green-500/50 shadow-[0_0_8px_rgba(74,222,128,0.3)]">
+                                    ACTIVE
+                                </span>
+                            {% elif item.status == "Completed" %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-blue-950 text-blue-300 border border-blue-500/50">
+                                    COMPLETED
+                                </span>
+                            {% else %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                                    {{ item.status|upper }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 px-4 text-right">
+                            {% if item.status == "Active" %}
+                                <form method="POST" action="{% url 'user_profile:connect' %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="disconnect">
+                                    <input type="hidden" name="assignment_id" value="{{ item.id }}">
+                                    <button type="submit" class="px-3 py-1.5 text-xs font-bold text-red-400 hover:text-white hover:bg-red-900/60 border border-red-500/40 rounded transition-colors">
+                                        DISCONNECT
+                                    </button>
+                                </form>
+                            {% else %}
+                                <form method="POST" action="{% url 'user_profile:connect' %}" class="inline">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="action" value="reconnect">
+                                    <input type="hidden" name="assignment_id" value="{{ item.id }}">
+                                    <button type="submit" class="px-3 py-1.5 text-xs font-bold text-cyan-400 hover:text-black hover:bg-cyan-400 border border-cyan-400 rounded transition-all shadow-[0_0_6px_rgba(0,240,255,0.4)]">
+                                        RECONNECT
+                                    </button>
+                                </form>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-8 text-center font-mono-tech border border-dashed border-slate-800 rounded-lg">
+            <p class="text-slate-400 tracking-wider text-base">NO ACTIVE OR HISTORICAL CONNECTIONS FOUND</p>
+            <p class="text-slate-500 text-xs mt-1">Select a verified professional from the catalog above to initialize a supervisory link.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.slide-in-toast').forEach(toast => {
+            toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)';
+            toast.style.transition = 'all 0.5s ease';
+            setTimeout(() => toast.remove(), 500);
+        });
+    }, 4500);
+</script>
+
+<style>
+    .hud-connect-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        background-color: rgba(4, 18, 35, 0.85);
+        border: 1px solid #0055ff;
+        border-radius: 8px;
+        color: #00f0ff;
+        padding: 12px 42px 12px 16px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 15px;
+        cursor: pointer;
+        transition: all 0.25s ease;
+    }
+    .hud-connect-select:focus {
+        outline: none;
+        border-color: #00f0ff;
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) inset;
+        color: #ffffff;
+    }
+    .hud-connect-select option {
+        background-color: #041224;
+        color: #00f0ff;
+        padding: 10px;
+    }
+    .hud-connect-select option:disabled {
+        color: #64748b;
+    }
+    .connect-select-arrow {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #00f0ff;
+        font-size: 12px;
+    }
+    .slide-in-toast {
+        animation: slideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes slideIn {
+        from { opacity: 0; transform: translateX(100%); }
+        to { opacity: 1; transform: translateX(0); }
+    }
+</style>
+{% endblock %}
