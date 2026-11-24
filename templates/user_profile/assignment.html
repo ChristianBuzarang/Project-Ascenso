@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if messages %}
+<div class="fixed top-20 right-6 z-50 flex flex-col gap-2">
+    {% for message in messages %}
+    <div class="hud-panel px-6 py-4 border-l-4 {% if message.tags == 'error' %}border-red-500 shadow-[0_0_20px_rgba(239,68,68,0.3)]{% elif message.tags == 'info' %}border-cyan-400 shadow-[0_0_20px_rgba(0,240,255,0.2)]{% else %}border-green-400 shadow-[0_0_20px_rgba(74,222,128,0.3)]{% endif %} flex items-center gap-3 slide-in-toast backdrop-blur-md">
+        {% if message.tags == 'error' %}
+            <svg class="w-6 h-6 text-red-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+        {% elif message.tags == 'info' %}
+            <svg class="w-6 h-6 text-cyan-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {% else %}
+            <svg class="w-6 h-6 text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+        {% endif %}
+        <span class="text-white font-mono-tech tracking-wider text-base">{{ message }}</span>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+
+<div class="w-full max-w-6xl flex flex-col gap-8 animate-fade-in py-4">
+
+    <!-- Header Panel -->
+    <div class="hud-panel p-8 bg-gradient-to-r from-blue-950/40 via-slate-900/60 to-transparent border-l-4 border-l-blue-500 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+        <div>
+            <p class="font-mono-tech text-blue-400 text-sm tracking-[0.25em] mb-2">> CLINICAL_PRACTICE // PATIENT_ASSIGNMENTS</p>
+            <h1 class="text-4xl md:text-5xl font-black text-white tracking-tight uppercase">
+                CLINICAL <span class="text-blue-400">ROSTER</span>
+            </h1>
+            <p class="font-mono-tech text-slate-400 text-sm mt-2 tracking-wide">
+                Monitor and manage assigned patients connected under your supervisory license ({{ professional.license_number|default:"VERIFIED" }}).
+            </p>
+        </div>
+        <div class="font-mono-tech text-right self-stretch md:self-auto border-t md:border-t-0 pt-3 md:pt-0 border-blue-500/20">
+            <span class="text-xs text-slate-400 tracking-widest uppercase block">CLINICIAN_SPECIALTY</span>
+            <span class="text-blue-400 text-2xl font-bold tracking-wider drop-shadow-[0_0_8px_blue]">{{ professional.specialty|upper }}</span>
+            <span class="block text-xs text-slate-400 mt-1">PATIENTS ASSIGNED: <span class="text-white font-bold">{{ assigned_patients|length }}</span></span>
+        </div>
+    </div>
+
+    <!-- Assigned Patients Table -->
+    <div class="hud-panel p-8 bg-slate-900/30">
+        <div class="flex justify-between items-center mb-6 border-b border-blue-500/30 pb-4">
+            <h2 class="text-2xl font-bold text-white tracking-widest uppercase font-mono-tech flex items-center gap-2">
+                <span class="text-blue-400">■</span> ASSIGNED PATIENT ROSTER ({{ assigned_patients|length }})
+            </h2>
+            <span class="font-mono-tech text-xs text-slate-400 tracking-widest">ACTIVE MONITORING QUEUE</span>
+        </div>
+
+        {% if assigned_patients %}
+        <div class="overflow-x-auto">
+            <table class="w-full text-left font-mono-tech border-collapse">
+                <thead>
+                    <tr class="border-b border-slate-700 text-blue-400 text-xs tracking-[0.2em] uppercase">
+                        <th class="py-3 px-4">PATIENT</th>
+                        <th class="py-3 px-4">USERNAME</th>
+                        <th class="py-3 px-4">ASSIGNED DATE</th>
+                        <th class="py-3 px-4">STATUS</th>
+                        <th class="py-3 px-4 text-right">UPDATE STATUS</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-sm">
+                    {% for item in assigned_patients %}
+                    <tr class="hover:bg-blue-950/20 transition-colors">
+                        <td class="py-4 px-4 font-bold text-white tracking-wide flex items-center gap-3">
+                            <div class="w-8 h-8 rounded-full border border-blue-400/50 bg-slate-800 flex items-center justify-center text-xs font-bold text-blue-300">
+                                {% if item.patient.user.first_name %}{{ item.patient.user.first_name|make_list|first|upper }}{% else %}{{ item.patient.user.username|make_list|first|upper }}{% endif %}
+                            </div>
+                            <span>
+                                {% if item.patient.user.first_name or item.patient.user.last_name %}
+                                    {{ item.patient.user.first_name }} {{ item.patient.user.last_name }}
+                                {% else %}
+                                    {{ item.patient.user.username }}
+                                {% endif %}
+                            </span>
+                        </td>
+                        <td class="py-4 px-4 text-slate-300">
+                            {{ item.patient.user.username }}
+                        </td>
+                        <td class="py-4 px-4 text-slate-400">
+                            {{ item.assigned_date|date:"Y-m-d H:i" }}
+                        </td>
+                        <td class="py-4 px-4">
+                            {% if item.status == "Active" %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-green-950 text-green-300 border border-green-500/50 shadow-[0_0_8px_rgba(74,222,128,0.3)]">
+                                    ACTIVE
+                                </span>
+                            {% elif item.status == "Completed" %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-blue-950 text-blue-300 border border-blue-500/50">
+                                    COMPLETED
+                                </span>
+                            {% elif item.status == "Pending" %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-amber-950 text-amber-300 border border-amber-500/50">
+                                    PENDING
+                                </span>
+                            {% else %}
+                                <span class="px-2.5 py-1 rounded text-xs font-bold bg-slate-800 text-slate-400 border border-slate-700">
+                                    {{ item.status|upper }}
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="py-4 px-4 text-right">
+                            <form method="POST" action="{% url 'user_profile:assignment' %}" class="inline-flex items-center gap-2">
+                                {% csrf_token %}
+                                <input type="hidden" name="action" value="update_status">
+                                <input type="hidden" name="assignment_id" value="{{ item.id }}">
+                                <select name="status" class="bg-slate-900 border border-blue-500/50 text-cyan-300 text-xs rounded px-2 py-1 font-mono-tech focus:outline-none">
+                                    <option value="Active" {% if item.status == "Active" %}selected{% endif %}>Active</option>
+                                    <option value="Completed" {% if item.status == "Completed" %}selected{% endif %}>Completed</option>
+                                    <option value="Pending" {% if item.status == "Pending" %}selected{% endif %}>Pending</option>
+                                    <option value="Inactive" {% if item.status == "Inactive" %}selected{% endif %}>Inactive</option>
+                                </select>
+                                <button type="submit" class="px-3 py-1 text-xs font-bold text-white bg-blue-600 hover:bg-blue-500 rounded transition-colors">
+                                    SET
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <div class="p-8 text-center font-mono-tech border border-dashed border-slate-800 rounded-lg">
+            <p class="text-slate-400 tracking-wider text-base">NO PATIENTS CURRENTLY ASSIGNED</p>
+            <p class="text-slate-500 text-xs mt-1">When patients select you as their supervising specialist, their records will populate here.</p>
+        </div>
+        {% endif %}
+    </div>
+
+</div>
+
+<script>
+    setTimeout(() => {
+        document.querySelectorAll('.slide-in-toast').forEach(toast => {
+            toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)';
+            toast.style.transition = 'all 0.5s ease';
+            setTimeout(() => toast.remove(), 500);
+        });
+    }, 4500);
+</script>
+{% endblock %}
