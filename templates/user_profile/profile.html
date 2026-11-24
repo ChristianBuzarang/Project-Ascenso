@@ -26,7 +26,7 @@
                 the class-based version did.
             -->
             <span id="avatar-placeholder" class="avatar-letter" style="{% if profile.profile_image and profile.profile_image.name %}display:none;{% endif %}">
-                {{ user.username|make_list|first|upper }}
+                {% if user.first_name %}{{ user.first_name|make_list|first|upper }}{% else %}{{ user.username|make_list|first|upper }}{% endif %}
             </span>
             <img id="avatar-preview" src="{% if profile.profile_image and profile.profile_image.name %}{{ profile.profile_image.url }}{% endif %}"
                  class="avatar-img" style="{% if not profile.profile_image or not profile.profile_image.name %}display:none;{% endif %}">
@@ -39,15 +39,28 @@
     <p class="avatar-hint">Click the camera icon to upload a photo. PNG or JPG.</p>
 
     <div class="profile-card hud-panel">
-        <h2 class="username-title">{{ user.username|upper }}</h2>
+        <h2 class="username-title">
+            {% if user.first_name or user.last_name %}
+                {{ user.first_name|upper }} {{ user.last_name|upper }}
+            {% else %}
+                {{ user.username|upper }}
+            {% endif %}
+        </h2>
         <p class="subtitle">OPERATOR_PROFILE</p>
 
         <form id="profile-form" method="POST" enctype="multipart/form-data" class="profile-form">
             {% csrf_token %}
 
             <div class="field">
-                <label class="field-label">&gt; FULL DESIGNATION</label>
-                <input type="text" name="full_name" value="{{ profile.full_name }}" placeholder="e.g. John Doe">
+                <label class="field-label">&gt; FULL DESIGNATION (ROLE)</label>
+                <div class="relative">
+                    <select name="designation" class="hud-profile-select">
+                        <option value="Patient" {% if profile.designation == "Patient" %}selected{% endif %}>Patient</option>
+                        <option value="Doctor" {% if profile.designation == "Doctor" %}selected{% endif %}>Doctor</option>
+                        <option value="Therapist" {% if profile.designation == "Therapist" %}selected{% endif %}>Therapist</option>
+                    </select>
+                    <div class="profile-select-arrow">▼</div>
+                </div>
             </div>
 
             <div class="field">
@@ -151,12 +164,42 @@
     .field { display: flex; flex-direction: column; gap: 0.5rem; }
     .field-label { font-size: 0.9rem; letter-spacing: 0.15em; color: #22d3ee; }
 
-    input[type="text"], textarea {
-        width: 100%; padding: 13px 15px; background-color: rgba(0,0,0,0.5);
+    input[type="text"], textarea, .hud-profile-select {
+        width: 100%; padding: 13px 15px; background-color: rgba(4, 18, 35, 0.7);
         border: 1px solid #0055ff; border-radius: 12px; color: #00f0ff;
         font-family: 'Share Tech Mono', monospace; font-size: 16px; resize: none;
+        transition: all 0.25s ease;
     }
-    input:focus, textarea:focus { outline: none; border-color: #00f0ff; box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) inset; color: #ffffff; }
+    .hud-profile-select {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        cursor: pointer;
+        padding-right: 42px;
+    }
+    .hud-profile-select option {
+        background-color: #041224 !important;
+        color: #00f0ff !important;
+        padding: 12px 16px !important;
+        font-family: 'Share Tech Mono', monospace;
+    }
+    .hud-profile-select option:checked {
+        background-color: #0033aa !important;
+        color: #ffffff !important;
+    }
+    .profile-select-arrow {
+        position: absolute;
+        right: 16px;
+        top: 50%;
+        transform: translateY(-50%);
+        pointer-events: none;
+        color: #00f0ff;
+        font-size: 12px;
+    }
+    input:focus, textarea:focus, .hud-profile-select:focus { 
+        outline: none; border-color: #00f0ff; 
+        box-shadow: 0 0 15px rgba(0, 240, 255, 0.4) inset; color: #ffffff; 
+    }
 
     /* Gap between the last field and the button, so they never touch */
     .hud-btn-chunky {

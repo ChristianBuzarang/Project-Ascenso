@@ -95,7 +95,7 @@ class AscendAgent:
         prompt = f"The user's face is showing '{level_choice}' during a {fear_choice} simulation. Write exactly 2 short, empowering sentences to display. Focus on grounding them."
         try:
             response = self.client.models.generate_content(
-                model="gemini-2.5-flash", contents=prompt
+                model="gemini-2.0-flash", contents=prompt
             )
             script = response.text
 

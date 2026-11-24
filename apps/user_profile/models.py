@@ -3,7 +3,16 @@ from django.contrib.auth.models import User
 
 
 class Profile(models.Model):
+    ROLE_CHOICES = [
+        ("Patient", "Patient"),
+        ("Doctor", "Doctor"),
+        ("Therapist", "Therapist"),
+    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="Patient")
+    designation = models.CharField(
+        max_length=100, choices=ROLE_CHOICES, default="Patient", blank=True
+    )
     image = models.ImageField(upload_to="profile/", blank=True, null=True)
     bio = models.TextField(blank=True)
     data_privacy_consent = models.BooleanField(default=False)
@@ -12,7 +21,36 @@ class Profile(models.Model):
         db_table = "user_profile"
 
     def __str__(self):
-        return self.user.username
+        return f"{self.user.username} ({self.designation})"
+
+    @property
+    def is_patient(self):
+        return self.designation == "Patient" or self.role == "Patient"
+
+    @property
+    def is_doctor(self):
+        return self.designation == "Doctor" or self.role == "Doctor"
+
+    @property
+    def is_therapist(self):
+        return self.designation == "Therapist" or self.role == "Therapist"
+
+    @property
+    def is_professional(self):
+        return self.is_doctor or self.is_therapist
+
+    @property
+    def full_name(self):
+        full = f"{self.user.first_name} {self.user.last_name}".strip()
+        return full if full else self.user.username
+
+    @property
+    def profile_image(self):
+        return self.image
+
+    @profile_image.setter
+    def profile_image(self, value):
+        self.image = value
 
 
 class Patient(models.Model):
@@ -27,7 +65,7 @@ class Patient(models.Model):
 
 class Professional(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    license_number = models.CharField(max_length=100)
+    license_number = models.CharField(max_length=100, blank=True, default="")
     specialty = models.CharField(max_length=100, blank=True, null=True)
 
     class Meta:
