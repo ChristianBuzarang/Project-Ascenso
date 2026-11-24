@@ -17,6 +17,55 @@
         </div>
     </div>
 
+    <!-- Professional Supervision / Connection Status Banner -->
+    {% if user.profile.is_patient %}
+    <div class="hud-panel p-5 flex flex-col md:flex-row justify-between items-center gap-4 bg-gradient-to-r from-cyan-950/40 via-slate-900/60 to-transparent border-l-4 border-l-cyan-400">
+        <div class="flex items-center gap-4">
+            <div class="w-3.5 h-3.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_10px_#00f0ff]"></div>
+            <div class="font-mono-tech">
+                <span class="text-xs text-slate-400 tracking-[0.2em] uppercase font-bold block">> SUPERVISING_SPECIALIST</span>
+                {% if assigned_professionals %}
+                    <div class="flex flex-wrap items-center gap-3 mt-1">
+                        {% for link in assigned_professionals %}
+                            <span class="text-white font-bold text-lg tracking-wider">
+                                {{ link.professional }}
+                                <span class="text-xs px-2.5 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-400/40 ml-1.5 uppercase font-normal">
+                                    {{ link.professional.specialty|default:"Clinical Specialist" }}
+                                </span>
+                                <span class="text-xs text-slate-400 ml-1">[{{ link.professional.license_number|default:"VERIFIED" }}]</span>
+                            </span>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-amber-400/90 text-sm font-semibold tracking-wider mt-1">NO CLINICAL SPECIALIST LINKED // DIRECT SUPERVISION INACTIVE</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="flex items-center gap-3 font-mono-tech">
+            <a href="{% url 'user_profile:connect' %}" class="hud-btn px-5 py-2.5 text-xs font-bold tracking-[0.15em] inline-block">
+                {% if assigned_professionals %}[ MANAGE CONNECTION ]{% else %}[ CONNECT SPECIALIST ]{% endif %}
+            </a>
+        </div>
+    </div>
+    {% elif user.profile.is_professional %}
+    <div class="hud-panel p-5 flex flex-col md:flex-row justify-between items-center gap-4 bg-gradient-to-r from-blue-950/40 via-slate-900/60 to-transparent border-l-4 border-l-blue-500">
+        <div class="flex items-center gap-4">
+            <div class="w-3.5 h-3.5 rounded-full bg-blue-400 animate-pulse shadow-[0_0_10px_#0055ff]"></div>
+            <div class="font-mono-tech">
+                <span class="text-xs text-slate-400 tracking-[0.2em] uppercase font-bold block">> CLINICAL_PRACTICE_ACTIVE</span>
+                <p class="text-white font-bold text-lg tracking-wider mt-1">
+                    ACTIVE ROSTER: <span class="text-cyan-400">{{ assigned_patients|length }}</span> PATIENT{{ assigned_patients|length|pluralize }} LINKED
+                </p>
+            </div>
+        </div>
+        <div class="flex items-center gap-3 font-mono-tech">
+            <a href="{% url 'user_profile:assignment' %}" class="hud-btn px-5 py-2.5 text-xs font-bold tracking-[0.15em] inline-block">
+                [ OPEN PATIENT ROSTER ]
+            </a>
+        </div>
+    </div>
+    {% endif %}
+
     <div class="grid grid-cols-1 md:grid-cols-12 gap-8">
         
         <!-- Left: Configuration (ENLARGED) -->

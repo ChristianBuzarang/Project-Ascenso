@@ -54,14 +54,25 @@
             <div class="field">
                 <label class="field-label">&gt; FULL DESIGNATION (ROLE)</label>
                 <div class="relative">
-                    <select name="designation" class="hud-profile-select">
-                        <option value="Patient" {% if profile.designation == "Patient" %}selected{% endif %}>Patient</option>
-                        <option value="Doctor" {% if profile.designation == "Doctor" %}selected{% endif %}>Doctor</option>
-                        <option value="Therapist" {% if profile.designation == "Therapist" %}selected{% endif %}>Therapist</option>
+                    <select name="designation" id="profile-designation-select" class="hud-profile-select">
+                        <option value="Patient" {% if profile.is_patient %}selected{% endif %}>Patient</option>
+                        <option value="Professional" {% if profile.is_professional %}selected{% endif %}>Professional (Doctor, Psychiatrist, etc.)</option>
                     </select>
                     <div class="profile-select-arrow">▼</div>
                 </div>
             </div>
+
+            <div id="prof-fields-wrap" style="{% if not profile.is_professional %}display: none;{% endif %}" class="flex flex-col gap-4">
+                <div class="field">
+                    <label class="field-label">&gt; CLINICAL SPECIALTY</label>
+                    <input type="text" name="specialty" value="{{ professional.specialty|default:'' }}" placeholder="e.g. Doctor, Psychiatrist, Therapist">
+                </div>
+                <div class="field">
+                    <label class="field-label">&gt; LICENSE NUMBER</label>
+                    <input type="text" name="license_number" value="{{ professional.license_number|default:'' }}" placeholder="e.g. MD-12345 or LIC-8800">
+                </div>
+            </div>
+
 
             <div class="field">
                 <label class="field-label">&gt; BIO</label>
@@ -85,6 +96,14 @@
         };
         if(event.target.files[0]) { reader.readAsDataURL(event.target.files[0]); }
     }
+    const desigSelect = document.getElementById('profile-designation-select');
+    const profWrap = document.getElementById('prof-fields-wrap');
+    if (desigSelect && profWrap) {
+        desigSelect.addEventListener('change', function() {
+            profWrap.style.display = this.value === 'Professional' ? 'flex' : 'none';
+        });
+    }
+
     setTimeout(() => {
         document.querySelectorAll('.slide-in-toast').forEach(toast => {
             toast.style.opacity = '0'; toast.style.transform = 'translateX(100%)';
@@ -92,6 +111,7 @@
             setTimeout(() => toast.remove(), 500);
         });
     }, 4000);
+
 </script>
 
 <style>

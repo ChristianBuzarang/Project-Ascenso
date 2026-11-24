@@ -100,6 +100,12 @@
                 {% if user.is_superuser %}
                     <a href="/admin" target="_blank" class="ml-4 text-purple-400 hover:text-purple-300 transition-colors">[ SYS.ADMIN ]</a>
                 {% endif %}
+                {% if user.is_authenticated and user.profile.is_patient %}
+                    <a href="{% url 'user_profile:connect' %}" class="ml-4 text-slate-400 hover:text-cyan-400 transition-colors">[ CONNECT ]</a>
+                {% endif %}
+                {% if user.is_authenticated and user.profile.is_professional %}
+                    <a href="{% url 'user_profile:assignment' %}" class="ml-4 text-slate-400 hover:text-cyan-400 transition-colors">[ ASSIGNMENT ]</a>
+                {% endif %}
                 <a href="{% url 'user_profile:profile' %}" class="ml-4 text-slate-400 hover:text-cyan-400 transition-colors">[ PROFILE ]</a>
                 <a href="{% url 'user_settings:settings' %}" class="ml-4 text-slate-400 hover:text-cyan-400 transition-colors">[ SETTINGS ]</a>
                 <a href="{% url 'login:logout' %}" class="ml-4 text-red-500 hover:text-red-400 transition-colors">[ TERMINATE_LINK ]</a>

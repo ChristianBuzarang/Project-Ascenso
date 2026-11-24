@@ -18,7 +18,7 @@
         <!-- Tailwind automatically splits the fields Python sends into a perfect 2-column layout -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-6">
             {% for field in form %}
-                <div class="flex flex-col gap-2 {% if field.name == 'designation' %}md:col-span-2{% endif %}">
+                <div class="flex flex-col gap-2 {% if field.name == 'designation' or field.name == 'specialty' or field.name == 'license_number' %}md:col-span-2{% endif %}" id="field-wrap-{{ field.name }}">
                     <label class="text-sm text-blue-400 tracking-widest">> {{ field.label|upper }}</label>
                     <div class="relative">
                         {{ field }}
@@ -26,12 +26,16 @@
                             <div class="reg-select-arrow">▼</div>
                         {% endif %}
                     </div>
+                    {% if field.help_text %}
+                        <span class="text-slate-400 text-xs font-mono-tech">{{ field.help_text }}</span>
+                    {% endif %}
                     {% if field.errors %}
                         <span class="text-red-500 text-xs animate-pulse">! {{ field.errors.0 }}</span>
                     {% endif %}
                 </div>
             {% endfor %}
         </div>
+
         
         <button type="submit" class="hud-btn mt-6 py-4 text-2xl font-bold w-full max-w-md mx-auto" style="background: linear-gradient(45deg, transparent 5%, #0033aa 5%); box-shadow: 6px 0px 0px #0055ff;">
             INITIALIZE_CLEARANCE
@@ -44,6 +48,27 @@
         </a>
     </div>
 </div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const designationSelect = document.querySelector('select[name="designation"]');
+        const specialtyWrap = document.getElementById('field-wrap-specialty');
+        const licenseWrap = document.getElementById('field-wrap-license_number');
+
+        function updateRoleFields() {
+            if (!designationSelect) return;
+            const isProf = designationSelect.value === 'Professional';
+            if (specialtyWrap) specialtyWrap.style.display = isProf ? 'flex' : 'none';
+            if (licenseWrap) licenseWrap.style.display = isProf ? 'flex' : 'none';
+        }
+
+        if (designationSelect) {
+            designationSelect.addEventListener('change', updateRoleFields);
+            updateRoleFields();
+        }
+    });
+</script>
+
 
 <style>
     /* CSS for Django Input Boxes and Select Dropdowns */
