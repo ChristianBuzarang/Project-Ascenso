@@ -1,18 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
 
+# Add the 'role' field and helper properties directly to the User (auth_user table)
+if not hasattr(User, "role"):
+    User.add_to_class(
+        "role",
+        models.CharField(
+            max_length=50,
+            choices=[("Patient", "Patient"), ("Professional", "Professional")],
+            default="Patient",
+        ),
+    )
+if not hasattr(User, "is_patient"):
+    User.add_to_class(
+        "is_patient",
+        property(lambda self: getattr(self, "role", "Patient") == "Patient"),
+    )
+if not hasattr(User, "is_professional"):
+    User.add_to_class(
+        "is_professional",
+        property(lambda self: getattr(self, "role", "") == "Professional"),
+    )
+
 
 class Profile(models.Model):
-    ROLE_CHOICES = [
-        ("Patient", "Patient"),
-        ("Doctor", "Doctor"),
-        ("Therapist", "Therapist"),
-    ]
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    role = models.CharField(max_length=50, choices=ROLE_CHOICES, default="Patient")
-    designation = models.CharField(
-        max_length=100, choices=ROLE_CHOICES, default="Patient", blank=True
-    )
     image = models.ImageField(upload_to="profile/", blank=True, null=True)
     bio = models.TextField(blank=True)
     data_privacy_consent = models.BooleanField(default=False)
@@ -21,23 +33,45 @@ class Profile(models.Model):
         db_table = "user_profile"
 
     def __str__(self):
-        return f"{self.user.username} ({self.designation})"
+        return f"{self.user.username} ({self.role})"
+
+    @property
+    def role(self):
+        return getattr(self.user, "role", "Patient")
+
+    @role.setter
+    def role(self, value):
+        self.user.role = value
+        if self.user.pk:
+            self.user.save(update_fields=["role"])
+
+    @property
+    def designation(self):
+        return self.role
+
+    @designation.setter
+    def designation(self, value):
+        self.role = value
 
     @property
     def is_patient(self):
-        return self.designation == "Patient" or self.role == "Patient"
+        return self.user.is_patient
 
     @property
     def is_doctor(self):
-        return self.designation == "Doctor" or self.role == "Doctor"
+        prof = getattr(self.user, "professional", None)
+        return self.is_professional and ("doctor" in getattr(prof, "specialty", "").lower() if prof else False)
 
     @property
     def is_therapist(self):
-        return self.designation == "Therapist" or self.role == "Therapist"
+        prof = getattr(self.user, "professional", None)
+        return self.is_professional and ("therapist" in getattr(prof, "specialty", "").lower() if prof else False)
 
     @property
     def is_professional(self):
-        return self.is_doctor or self.is_therapist
+        return self.user.is_professional
+
+
 
     @property
     def full_name(self):
@@ -72,7 +106,12 @@ class Professional(models.Model):
         db_table = "professional"
 
     def __str__(self):
-        return f"Dr. {self.user.last_name}"
+        full = f"{self.user.first_name} {self.user.last_name}".strip()
+        display_name = full if full else self.user.username
+        if self.specialty:
+            return f"{display_name} ({self.specialty})"
+        return f"Dr. {self.user.last_name}" if self.user.last_name else f"Professional: {display_name}"
+
 
 
 class ProfessionalAssignment(models.Model):
