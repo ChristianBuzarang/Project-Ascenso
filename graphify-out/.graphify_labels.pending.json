@@ -1,13 +1,17 @@
 {
-  "0": "ai_agent.py",
+  "0": "AscensionRecord",
   "3": "register/views.py",
-  "4": "AscensionRecord",
+  "4": "simulation/views.py",
   "7": "django_db",
   "8": "[ADR-XXXX] Title: Short Sentence Describing the Decision",
   "9": "ModelAdmin",
-  "29": "login/views.py",
+  "29": "ModelAdmin",
   "30": "Communities (30 total, 20 thin omitted)",
-  "31": "simulation/admin.py",
+  "31": "ModelAdmin",
   "32": "register",
-  "33": "login_required"
+  "33": "login_required",
+  "34": "Profile",
+  "35": "login_required",
+  "36": "register",
+  "37": "login_required"
 }
